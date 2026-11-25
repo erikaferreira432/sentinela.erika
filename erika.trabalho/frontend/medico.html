@@ -1,0 +1,1953 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#087f68">
+  <title>CLINOVA | Central Médica</title>
+
+  <style>
+    :root {
+      --primary: #087f68;
+      --primary-dark: #075b4d;
+      --primary-light: #e5f5f0;
+      --mint: #b9e8d9;
+      --background: #f3f7f6;
+      --surface: #ffffff;
+      --text: #203b36;
+      --muted: #82938e;
+      --border: #e3ece8;
+      --danger: #d94b4b;
+      --warning: #d58b25;
+      --success: #23865d;
+      --shadow: 0 12px 35px rgba(26, 67, 56, .06);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 25px;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button, a, input, select, textarea {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid #80cdb8;
+      outline-offset: 3px;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 255px minmax(0, 1fr);
+    }
+
+    /* MENU LATERAL */
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 19px;
+      display: flex;
+      flex-direction: column;
+      background: #103d35;
+      color: white;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 5px 27px;
+      border-bottom: 1px solid rgba(255,255,255,.13);
+    }
+
+    .brand-symbol {
+      width: 47px;
+      height: 47px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: #103d35;
+      background: #c1eadb;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .brand h2 {
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .brand p {
+      margin-top: 4px;
+      color: #a9c8bd;
+      font-size: 9px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .menu-label {
+      margin: 30px 10px 13px;
+      color: #8eafa3;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 13px 14px;
+      border-radius: 12px;
+      color: #c1d5ce;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 650;
+      transition: .2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: white;
+      background: rgba(255,255,255,.12);
+    }
+
+    .nav-link.active {
+      box-shadow: inset 3px 0 #8be0c4;
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 15px;
+      background: rgba(255,255,255,.06);
+    }
+
+    .online {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #63dfa7;
+      box-shadow: 0 0 0 4px rgba(99,223,167,.12);
+    }
+
+    .sidebar-bottom p {
+      margin-top: 10px;
+      color: #a9c8bd;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    /* CONTEÚDO */
+
+    .main {
+      min-width: 0;
+      padding: 30px clamp(16px, 3vw, 42px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .breadcrumb {
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .page-title {
+      font-size: clamp(25px, 3vw, 34px);
+      letter-spacing: -1px;
+      font-weight: 800;
+    }
+
+    .page-subtitle {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .date-card,
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: white;
+    }
+
+    .date-icon,
+    .profile-avatar {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .date-card strong,
+    .profile-card strong {
+      display: block;
+      font-size: 11px;
+    }
+
+    .date-card small,
+    .profile-card small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .btn-back {
+      padding: 11px 15px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 750;
+      transition: .2s;
+    }
+
+    .btn-back:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* BANNER */
+
+    .welcome {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 31px;
+      margin-bottom: 22px;
+      border-radius: 22px;
+      color: white;
+      background: linear-gradient(115deg, #075b4d, #087f68 65%, #23a58a);
+      box-shadow: 0 15px 35px rgba(8,127,104,.15);
+    }
+
+    .welcome::after {
+      content: "✚";
+      position: absolute;
+      right: 25px;
+      top: -40px;
+      color: rgba(255,255,255,.08);
+      font-size: 180px;
+      pointer-events: none;
+    }
+
+    .welcome-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .welcome-tag {
+      display: inline-block;
+      margin-bottom: 13px;
+      padding: 7px 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 30px;
+      background: rgba(255,255,255,.12);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .welcome h2 {
+      font-size: clamp(20px, 2vw, 27px);
+      margin-bottom: 9px;
+    }
+
+    .welcome p {
+      max-width: 590px;
+      color: #e0f2eb;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .welcome-mark {
+      position: relative;
+      z-index: 1;
+      width: 85px;
+      height: 85px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 25px;
+      background: rgba(255,255,255,.13);
+      font-size: 39px;
+    }
+
+    /* INDICADORES */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-icon {
+      width: 47px;
+      height: 47px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: var(--primary-light);
+      font-size: 21px;
+    }
+
+    .stat-card:nth-child(2) .stat-icon {
+      background: #fff3df;
+    }
+
+    .stat-card:nth-child(3) .stat-icon {
+      background: #e9f1ff;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .stat-value {
+      margin-top: 5px;
+      font-size: 25px;
+      font-weight: 850;
+    }
+
+    .stat-caption {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    /* ÁREAS */
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(310px, .88fr);
+      align-items: start;
+      gap: 20px;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    .panel {
+      min-width: 0;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      background: white;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 20px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .panel-icon {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 13px;
+      background: var(--primary-light);
+      font-size: 20px;
+    }
+
+    .panel-icon.orange {
+      background: #fff3df;
+    }
+
+    .panel-icon.blue {
+      background: #e9f1ff;
+    }
+
+    .panel h2 {
+      font-size: 15px;
+    }
+
+    .panel-subtitle {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .counter {
+      min-width: 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      padding: 0 8px;
+      border-radius: 11px;
+      color: var(--primary);
+      background: var(--primary-light);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    /* PESQUISA */
+
+    .patient-tools {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 175px;
+      gap: 10px;
+      margin-bottom: 17px;
+    }
+
+    .search-input,
+    .filter-select {
+      width: 100%;
+      height: 43px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      outline: none;
+      background: #fbfdfc;
+      color: var(--text);
+      font-size: 11px;
+    }
+
+    .search-input:focus,
+    .filter-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(8,127,104,.08);
+    }
+
+    /* PACIENTES */
+
+    .patient-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .patient-card {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fcfefd;
+      transition: .2s;
+    }
+
+    .patient-card:hover {
+      border-color: #a8d9c9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(20,70,55,.06);
+    }
+
+    .patient-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .patient-identity {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .patient-avatar {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 13px;
+      background: var(--primary-light);
+      font-size: 19px;
+    }
+
+    .patient-name {
+      font-size: 12px;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .patient-label {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .priority {
+      padding: 6px 9px;
+      border-radius: 30px;
+      font-size: 9px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .priority.high {
+      color: #b92f2f;
+      background: #ffeded;
+    }
+
+    .priority.medium {
+      color: #a36a12;
+      background: #fff4df;
+    }
+
+    .priority.low {
+      color: #247653;
+      background: #e9f8ef;
+    }
+
+    .patient-data {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      padding: 13px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      margin-bottom: 5px;
+    }
+
+    .data-item strong {
+      display: block;
+      font-size: 10px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .patient-observation {
+      margin-top: 12px;
+      color: #71837d;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .patient-observation strong {
+      color: var(--text);
+    }
+
+    .patient-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    /* FORMULÁRIOS */
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 15px;
+    }
+
+    .form-field label {
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: #fbfdfc;
+      color: var(--text);
+      outline: none;
+      font-size: 11px;
+      transition: .2s;
+    }
+
+    .form-field input,
+    .form-field select {
+      height: 44px;
+    }
+
+    .form-field textarea {
+      min-height: 95px;
+      resize: vertical;
+      line-height: 1.7;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(8,127,104,.08);
+    }
+
+    .form-field input[readonly] {
+      background: #f0f5f3;
+      color: #6d8079;
+    }
+
+    .allergy-alert {
+      display: none;
+      margin-bottom: 15px;
+      padding: 13px;
+      border: 1px solid #f3c2bd;
+      border-radius: 11px;
+      color: #a42e28;
+      background: #fff0ee;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .quick-info {
+      padding: 13px;
+      margin-bottom: 16px;
+      border-radius: 11px;
+      color: #56766c;
+      background: #edf8f3;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    /* BOTÕES */
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 800;
+      transition: .2s;
+    }
+
+    .button-primary {
+      color: white;
+      background: var(--primary);
+    }
+
+    .button-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .button-light {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .button-light:hover {
+      background: #d4eee4;
+    }
+
+    .button-full {
+      width: 100%;
+    }
+
+    .button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .consult-panel {
+      border-top: 3px solid var(--primary);
+    }
+
+    .discharge-panel {
+      border-top: 3px solid #40a77b;
+    }
+
+    .tv-panel {
+      border-top: 3px solid #5d9bd6;
+    }
+
+    .form-note {
+      margin-top: 13px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.7;
+    }
+
+    /* MENSAGENS */
+
+    .empty-state {
+      padding: 27px 15px;
+      border: 1px dashed #d5e5de;
+      border-radius: 13px;
+      background: #fbfdfc;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .empty-icon {
+      margin-bottom: 8px;
+      font-size: 27px;
+    }
+
+    .notice {
+      display: none;
+      margin-bottom: 18px;
+      padding: 13px 15px;
+      border-radius: 11px;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .notice.success {
+      display: block;
+      color: #176c4b;
+      border: 1px solid #bce6d1;
+      background: #e9f8f0;
+    }
+
+    .notice.error {
+      display: block;
+      color: #a42e28;
+      border: 1px solid #f3c2bd;
+      background: #fff0ee;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 25px 2px 0;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 220px minmax(0, 1fr);
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        padding: 15px;
+      }
+
+      .brand {
+        padding-bottom: 14px;
+      }
+
+      .menu-label,
+      .sidebar-bottom {
+        display: none;
+      }
+
+      .nav-list {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 4px;
+        margin-top: 13px;
+      }
+
+      .nav-link {
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        padding: 9px 3px;
+        text-align: center;
+        font-size: 9px;
+      }
+
+      .main {
+        padding: 20px 14px;
+      }
+
+      .date-card {
+        display: none;
+      }
+
+      .stats {
+        gap: 9px;
+      }
+
+      .stat-card {
+        padding: 13px;
+        gap: 9px;
+      }
+
+      .stat-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+      }
+
+      .profile-card {
+        margin-left: auto;
+      }
+
+      .profile-card > div:last-child {
+        display: none;
+      }
+
+      .welcome {
+        padding: 21px;
+      }
+
+      .welcome-mark {
+        width: 55px;
+        height: 55px;
+        font-size: 26px;
+        border-radius: 17px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card {
+        flex-direction: row;
+      }
+
+      .patient-tools {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+
+      .patient-actions {
+        flex-direction: column;
+      }
+
+      .patient-actions .button {
+        width: 100%;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+
+      .nav-link {
+        font-size: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-symbol">✚</div>
+      <div>
+        <h2>CLINOVA</h2>
+        <p>Gestão hospitalar</p>
+      </div>
+    </div>
+
+    <div class="menu-label">Navegação principal</div>
+
+    <nav class="nav-list" aria-label="Navegação médica">
+      <a href="#inicio" class="nav-link active">
+        <span class="nav-icon">⌂</span>
+        <span>Início</span>
+      </a>
+
+      <a href="#pacientes" class="nav-link">
+        <span class="nav-icon">♧</span>
+        <span>Pacientes</span>
+      </a>
+
+      <a href="#consulta" class="nav-link">
+        <span class="nav-icon">🩺</span>
+        <span>Consultas</span>
+      </a>
+
+      <a href="#alta" class="nav-link">
+        <span class="nav-icon">📄</span>
+        <span>Altas</span>
+      </a>
+
+      <a href="#chamada" class="nav-link">
+        <span class="nav-icon">📺</span>
+        <span>TV</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="online">
+        <span class="online-dot"></span>
+        Área médica
+      </div>
+      <p>Ambiente de gerenciamento clínico da CLINOVA.</p>
+    </div>
+  </aside>
+
+  <main class="main" id="inicio">
+
+    <header class="topbar">
+      <div>
+        <div class="breadcrumb">CLINOVA / Central médica</div>
+        <h1 class="page-title">Central de Atendimento</h1>
+        <p class="page-subtitle">
+          Gerencie os pacientes e organize os atendimentos hospitalares.
+        </p>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn-back" type="button" onclick="voltarPagina()">
+          ← Voltar
+        </button>
+
+        <div class="date-card">
+          <div class="date-icon">📅</div>
+          <div>
+            <strong id="dataAtual">Carregando...</strong>
+            <small id="horaAtual">--:--</small>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="profile-avatar">🩺</div>
+          <div>
+            <strong>Área médica</strong>
+            <small>Profissional conectado</small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="mensagem" class="notice" role="status" aria-live="polite"></div>
+
+    <section class="welcome">
+      <div class="welcome-content">
+        <span class="welcome-tag">✦ Plataforma CLINOVA</span>
+        <h2>Bem-vindo à sua central médica!</h2>
+        <p>
+          Acompanhe a fila de pacientes, registre consultas, encaminhe
+          altas hospitalares e organize chamadas de atendimento.
+          Todas as ferramentas em um só lugar.
+        </p>
+      </div>
+      <div class="welcome-mark">✚</div>
+    </section>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div>
+          <div class="stat-label">Pacientes na fila</div>
+          <div class="stat-value" id="resumoPacientes">0</div>
+          <div class="stat-caption">Registros aguardando atendimento</div>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div>
+          <div class="stat-label">Área de consulta</div>
+          <div class="stat-value">Ativa</div>
+          <div class="stat-caption">Registro de informações clínicas</div>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon">📺</div>
+        <div>
+          <div class="stat-label">Comunicação</div>
+          <div class="stat-value">TV</div>
+          <div class="stat-caption">Chamada de pacientes</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="workspace">
+
+      <div class="column">
+
+        <!-- FILA DE PACIENTES -->
+        <section class="panel" id="pacientes">
+          <div class="panel-header">
+            <div class="panel-heading">
+              <div class="panel-icon">👥</div>
+              <div>
+                <h2>Fila de pacientes</h2>
+                <p class="panel-subtitle">
+                  Consulte os registros e selecione quem será atendido.
+                </p>
+              </div>
+            </div>
+            <div class="counter" id="contadorPacientes">0</div>
+          </div>
+
+          <div class="patient-tools">
+            <input
+              class="search-input"
+              type="search"
+              id="pesquisaPaciente"
+              placeholder="⌕  Pesquisar paciente..."
+              aria-label="Pesquisar pacientes"
+            >
+
+            <select
+              class="filter-select"
+              id="filtroPrioridade"
+              aria-label="Filtrar por prioridade"
+            >
+              <option value="">Todas as prioridades</option>
+              <option value="alta">Alta</option>
+              <option value="media">Média</option>
+              <option value="baixa">Baixa</option>
+            </select>
+          </div>
+
+          <div class="patient-list" id="triagens">
+            <div class="empty-state">
+              Carregando pacientes...
+            </div>
+          </div>
+
+          <p class="form-note">
+            A fila é atualizada automaticamente a cada 30 segundos.
+          </p>
+        </section>
+
+        <!-- ALTA HOSPITALAR -->
+        <section class="panel discharge-panel" id="alta">
+          <div class="panel-header">
+            <div class="panel-heading">
+              <div class="panel-icon">📄</div>
+              <div>
+                <h2>Alta hospitalar</h2>
+                <p class="panel-subtitle">
+                  Encaminhe o paciente para o formulário de alta.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-info">
+            ℹ️ Selecione o paciente correto antes de continuar para a
+            página de alta hospitalar.
+          </div>
+
+          <div class="form-field">
+            <label for="pacienteAlta">Paciente</label>
+            <select id="pacienteAlta">
+              <option value="">Selecione um paciente</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            class="button button-primary button-full"
+            onclick="irParaAlta()"
+          >
+            📄 Continuar para alta
+          </button>
+        </section>
+
+        <!-- CHAMADA PARA TV -->
+        <section class="panel tv-panel" id="chamada">
+          <div class="panel-header">
+            <div class="panel-heading">
+              <div class="panel-icon blue">📺</div>
+              <div>
+                <h2>Central de chamadas</h2>
+                <p class="panel-subtitle">
+                  Encaminhe o paciente para a sala e o guichê.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="pacienteChamada">Paciente</label>
+            <select id="pacienteChamada">
+              <option value="">Selecione um paciente</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="salaPaciente">Sala de atendimento</label>
+            <select id="salaPaciente">
+              <option value="">Selecione a sala</option>
+              <option value="Sala 01">Sala 01</option>
+              <option value="Sala 02">Sala 02</option>
+              <option value="Sala 03">Sala 03</option>
+              <option value="Sala 04">Sala 04</option>
+              <option value="Sala 05">Sala 05</option>
+              <option value="Sala 06">Sala 06</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="guichePaciente">Guichê</label>
+            <select id="guichePaciente">
+              <option value="">Selecione o guichê</option>
+              <option value="Guichê 01">Guichê 01</option>
+              <option value="Guichê 02">Guichê 02</option>
+              <option value="Guichê 03">Guichê 03</option>
+              <option value="Guichê 04">Guichê 04</option>
+              <option value="Guichê 05">Guichê 05</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            class="button button-primary button-full"
+            onclick="enviarParaTV()"
+          >
+            📺 Enviar chamada para TV
+          </button>
+
+          <p class="form-note">
+            A página tv.html deve utilizar a chave chamadaTV do localStorage.
+          </p>
+        </section>
+
+      </div>
+
+      <div class="column">
+
+        <!-- REGISTRO DE CONSULTA -->
+        <section class="panel consult-panel" id="consulta">
+          <div class="panel-header">
+            <div class="panel-heading">
+              <div class="panel-icon">🩺</div>
+              <div>
+                <h2>Registro de consulta</h2>
+                <p class="panel-subtitle">
+                  Registre as informações do atendimento.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="pacienteSelecionado">Paciente selecionado</label>
+            <input
+              type="text"
+              id="pacienteSelecionado"
+              placeholder="Selecione na fila de pacientes"
+              readonly
+            >
+          </div>
+
+          <div
+            class="allergy-alert"
+            id="alertaAlergia"
+            role="alert"
+          ></div>
+
+          <div class="form-field">
+            <label for="diagnostico">Diagnóstico / avaliação</label>
+            <textarea
+              id="diagnostico"
+              placeholder="Descreva a avaliação clínica..."
+            ></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="medicacao">Medicação / prescrição</label>
+            <select id="medicacao">
+              <option value="">Selecione uma medicação</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="observacoes">Observações</label>
+            <textarea
+              id="observacoes"
+              placeholder="Adicione as observações relevantes..."
+            ></textarea>
+          </div>
+
+          <button
+            type="button"
+            class="button button-primary button-full"
+            id="botaoSalvar"
+            onclick="salvar()"
+          >
+            ✓ Salvar consulta
+          </button>
+
+          <p class="form-note">
+            Confira os dados antes de salvar. Este painel é uma interface
+            de projeto e não substitui um sistema clínico validado.
+          </p>
+        </section>
+
+      </div>
+
+    </section>
+
+    <footer class="footer">
+      <span>© 2026 CLINOVA · Gestão Hospitalar</span>
+      <span>Central de Atendimento Médico</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  let pacientesAtuais = [];
+  let pacienteSelecionadoIndex = null;
+  let temporizadorMensagem = null;
+
+  /* VOLTAR */
+
+  function voltarPagina() {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      mostrarMensagem(
+        "Não existe uma página anterior nesta navegação.",
+        "error"
+      );
+    }
+  }
+
+  /* UTILITÁRIOS */
+
+  function escaparHTML(valor) {
+    return String(valor ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function nomeDoPaciente(paciente, index) {
+    return paciente.nome ||
+      paciente.paciente ||
+      `Paciente ${index + 1}`;
+  }
+
+  function mostrarMensagem(texto, tipo = "success") {
+    const elemento = document.getElementById("mensagem");
+
+    elemento.textContent = texto;
+    elemento.className = `notice ${tipo}`;
+
+    if (temporizadorMensagem) {
+      clearTimeout(temporizadorMensagem);
+    }
+
+    elemento.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+
+    temporizadorMensagem = setTimeout(() => {
+      elemento.className = "notice";
+      elemento.textContent = "";
+    }, 5000);
+  }
+
+  function atualizarDataHora() {
+    const agora = new Date();
+
+    document.getElementById("dataAtual").textContent =
+      agora.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+
+    document.getElementById("horaAtual").textContent =
+      agora.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+  }
+
+  /* CLASSIFICAÇÃO DE PRIORIDADE */
+
+  function classificarPrioridade(paciente) {
+    const valor = String(
+      paciente.prioridade || paciente.risco || ""
+    ).toLowerCase();
+
+    if (
+      valor.includes("alta") ||
+      valor.includes("alto") ||
+      valor.includes("urgente") ||
+      valor.includes("vermelho")
+    ) {
+      return {
+        classe: "high",
+        filtro: "alta",
+        texto: paciente.prioridade || paciente.risco || "Alta"
+      };
+    }
+
+    if (
+      valor.includes("media") ||
+      valor.includes("média") ||
+      valor.includes("medio") ||
+      valor.includes("médio") ||
+      valor.includes("amarelo")
+    ) {
+      return {
+        classe: "medium",
+        filtro: "media",
+        texto: paciente.prioridade || paciente.risco || "Média"
+      };
+    }
+
+    return {
+      classe: "low",
+      filtro: "baixa",
+      texto: paciente.prioridade || paciente.risco || "Normal"
+    };
+  }
+
+  /* CARREGAR PACIENTES */
+
+  async function carregar() {
+    try {
+      const resposta = await fetch("/triagens");
+
+      if (!resposta.ok) {
+        throw new Error("Não foi possível carregar a fila.");
+      }
+
+      const dados = await resposta.json();
+
+      pacientesAtuais = Array.isArray(dados) ? dados : [];
+
+      mostrarPacientes();
+      carregarPacientesAlta();
+      carregarPacientesChamada();
+
+      if (pacienteSelecionadoIndex !== null) {
+        const paciente = pacientesAtuais[pacienteSelecionadoIndex];
+
+        if (paciente) {
+          document.getElementById("pacienteSelecionado").value =
+            nomeDoPaciente(paciente, pacienteSelecionadoIndex);
+
+          mostrarAlertaAlergia(paciente);
+        } else {
+          limparSelecao();
+        }
+      }
+
+    } catch (erro) {
+      console.error("Erro ao carregar pacientes:", erro);
+
+      document.getElementById("triagens").innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">⚠️</div>
+          <strong>Não foi possível carregar a fila.</strong>
+          <br>Verifique se o servidor está funcionando.
+        </div>
+      `;
+    }
+  }
+
+  /* EXIBIR PACIENTES */
+
+  function mostrarPacientes() {
+    const container = document.getElementById("triagens");
+    const pesquisa = document.getElementById("pesquisaPaciente")
+      .value.trim().toLowerCase();
+
+    const filtro = document.getElementById("filtroPrioridade").value;
+
+    document.getElementById("contadorPacientes").textContent =
+      pacientesAtuais.length;
+
+    document.getElementById("resumoPacientes").textContent =
+      pacientesAtuais.length;
+
+    const filtrados = pacientesAtuais
+      .map((paciente, index) => ({ paciente, index }))
+      .filter(({ paciente, index }) => {
+        const nome = nomeDoPaciente(paciente, index).toLowerCase();
+        const prioridade = classificarPrioridade(paciente);
+
+        return nome.includes(pesquisa) &&
+          (!filtro || prioridade.filtro === filtro);
+      });
+
+    if (!filtrados.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🔎</div>
+          <strong>Nenhum paciente encontrado</strong>
+          <br>Tente alterar a pesquisa ou o filtro.
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtrados.map(({ paciente, index }) => {
+      const nome = nomeDoPaciente(paciente, index);
+      const prioridade = classificarPrioridade(paciente);
+
+      const alergia = paciente.alergia || "Não informada";
+
+      const sintoma =
+        paciente.sintoma ||
+        paciente.sintomas ||
+        "Não informado";
+
+      const temperatura =
+        paciente.temperatura || "Não informada";
+
+      const observacao =
+        paciente.observacao ||
+        paciente.observacoes ||
+        "Nenhuma observação registrada.";
+
+      return `
+        <article class="patient-card">
+          <div class="patient-top">
+            <div class="patient-identity">
+              <div class="patient-avatar">👤</div>
+              <div>
+                <div class="patient-name">
+                  ${escaparHTML(nome)}
+                </div>
+                <div class="patient-label">
+                  Registro da fila de atendimento
+                </div>
+              </div>
+            </div>
+
+            <span class="priority ${prioridade.classe}">
+              ${escaparHTML(prioridade.texto)}
+            </span>
+          </div>
+
+          <div class="patient-data">
+            <div class="data-item">
+              <span>Sintomas</span>
+              <strong>${escaparHTML(sintoma)}</strong>
+            </div>
+
+            <div class="data-item">
+              <span>Temperatura</span>
+              <strong>${escaparHTML(temperatura)}</strong>
+            </div>
+
+            <div class="data-item">
+              <span>Alergias registradas</span>
+              <strong>${escaparHTML(alergia)}</strong>
+            </div>
+
+            <div class="data-item">
+              <span>Prioridade</span>
+              <strong>${escaparHTML(prioridade.texto)}</strong>
+            </div>
+          </div>
+
+          <div class="patient-observation">
+            <strong>Observações:</strong>
+            ${escaparHTML(observacao)}
+          </div>
+
+          <div class="patient-actions">
+            <button
+              type="button"
+              class="button button-primary"
+              onclick="selecionar(${index})"
+            >
+              🩺 Selecionar para consulta
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  /* SELECIONAR PACIENTE */
+
+  function selecionar(index) {
+    const paciente = pacientesAtuais[index];
+
+    if (!paciente) {
+      mostrarMensagem("Paciente não encontrado.", "error");
+      return;
+    }
+
+    pacienteSelecionadoIndex = index;
+
+    document.getElementById("pacienteSelecionado").value =
+      nomeDoPaciente(paciente, index);
+
+    document.getElementById("pacienteChamada").value =
+      String(index);
+
+    document.getElementById("pacienteAlta").value =
+      String(index);
+
+    mostrarAlertaAlergia(paciente);
+
+    document.getElementById("consulta").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  function limparSelecao() {
+    pacienteSelecionadoIndex = null;
+
+    document.getElementById("pacienteSelecionado").value = "";
+
+    document.getElementById("alertaAlergia").style.display = "none";
+    document.getElementById("alertaAlergia").textContent = "";
+  }
+
+  /* ALERTA DE ALERGIA */
+
+  function mostrarAlertaAlergia(paciente) {
+    const alerta = document.getElementById("alertaAlergia");
+    const alergia = String(paciente.alergia || "").trim();
+
+    const semAlergia = [
+      "",
+      "nenhuma",
+      "não",
+      "nao",
+      "não informado",
+      "nao informado"
+    ];
+
+    if (!semAlergia.includes(alergia.toLowerCase())) {
+      alerta.textContent =
+        `⚠️ Atenção: alergia registrada para este paciente: ${alergia}. Confira essa informação antes de registrar a prescrição.`;
+
+      alerta.style.display = "block";
+    } else {
+      alerta.textContent = "";
+      alerta.style.display = "none";
+    }
+  }
+
+  /* LISTAS DE PACIENTES */
+
+  function preencherSelectPacientes(id) {
+    const select = document.getElementById(id);
+    const valorAnterior = select.value;
+
+    select.innerHTML = "";
+
+    const inicial = document.createElement("option");
+    inicial.value = "";
+    inicial.textContent = "Selecione um paciente";
+    select.appendChild(inicial);
+
+    pacientesAtuais.forEach((paciente, index) => {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = nomeDoPaciente(paciente, index);
+      select.appendChild(option);
+    });
+
+    if (
+      valorAnterior !== "" &&
+      pacientesAtuais[Number(valorAnterior)]
+    ) {
+      select.value = valorAnterior;
+    }
+  }
+
+  function carregarPacientesAlta() {
+    preencherSelectPacientes("pacienteAlta");
+  }
+
+  function carregarPacientesChamada() {
+    preencherSelectPacientes("pacienteChamada");
+  }
+
+  /* CARREGAR MEDICAÇÕES */
+
+  async function carregarMedicacoes() {
+    const select = document.getElementById("medicacao");
+
+    try {
+      const resposta = await fetch("/lista-medicacoes");
+
+      if (!resposta.ok) {
+        throw new Error("Falha ao consultar medicações.");
+      }
+
+      const dados = await resposta.json();
+
+      select.innerHTML =
+        '<option value="">Selecione uma medicação</option>';
+
+      if (!Array.isArray(dados)) return;
+
+      dados.forEach(item => {
+        const nome = typeof item === "string"
+          ? item
+          : item.nome || item.medicacao || "";
+
+        if (!nome) return;
+
+        const option = document.createElement("option");
+        option.value = nome;
+        option.textContent = nome;
+        select.appendChild(option);
+      });
+
+    } catch (erro) {
+      console.error("Erro ao carregar medicações:", erro);
+    }
+  }
+
+  /* ENCAMINHAR PARA ALTA */
+
+  function irParaAlta() {
+    const select = document.getElementById("pacienteAlta");
+
+    if (select.value === "") {
+      mostrarMensagem(
+        "Selecione um paciente antes de continuar para a alta.",
+        "error"
+      );
+      return;
+    }
+
+    const index = Number(select.value);
+    const paciente = pacientesAtuais[index];
+
+    if (!paciente) {
+      mostrarMensagem("Paciente não encontrado.", "error");
+      return;
+    }
+
+    localStorage.setItem(
+      "pacienteAlta",
+      JSON.stringify(paciente)
+    );
+
+    localStorage.setItem("pacienteAltaIndex", String(index));
+
+    window.location.href = "alta.html";
+  }
+
+  /* ENVIAR CHAMADA PARA TV */
+
+  function enviarParaTV() {
+    const select = document.getElementById("pacienteChamada");
+    const sala = document.getElementById("salaPaciente").value;
+    const guiche = document.getElementById("guichePaciente").value;
+
+    if (select.value === "") {
+      mostrarMensagem("Selecione um paciente para chamar.", "error");
+      return;
+    }
+
+    if (!sala || !guiche) {
+      mostrarMensagem(
+        "Selecione a sala e o guichê antes de enviar a chamada.",
+        "error"
+      );
+      return;
+    }
+
+    const index = Number(select.value);
+    const paciente = pacientesAtuais[index];
+
+    if (!paciente) {
+      mostrarMensagem("Paciente não encontrado.", "error");
+      return;
+    }
+
+    const chamada = {
+      nome: nomeDoPaciente(paciente, index),
+      sala: sala,
+      guiche: guiche,
+      prioridade: paciente.prioridade || paciente.risco || "Normal",
+      horario: new Date().toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit"
+      }),
+      paciente: paciente
+    };
+
+    localStorage.setItem("chamadaTV", JSON.stringify(chamada));
+
+    window.location.href = "tv.html";
+  }
+
+  /* SALVAR CONSULTA */
+
+  async function salvar() {
+    if (pacienteSelecionadoIndex === null) {
+      mostrarMensagem(
+        "Selecione um paciente na fila antes de registrar a consulta.",
+        "error"
+      );
+      return;
+    }
+
+    const paciente = pacientesAtuais[pacienteSelecionadoIndex];
+
+    if (!paciente) {
+      mostrarMensagem(
+        "O paciente não está mais disponível na lista. Atualize e selecione novamente.",
+        "error"
+      );
+      return;
+    }
+
+    const diagnostico =
+      document.getElementById("diagnostico").value.trim();
+
+    const medicacao =
+      document.getElementById("medicacao").value;
+
+    const observacoes =
+      document.getElementById("observacoes").value.trim();
+
+    if (!diagnostico) {
+      mostrarMensagem("Preencha o diagnóstico ou a avaliação.", "error");
+      document.getElementById("diagnostico").focus();
+      return;
+    }
+
+    if (!medicacao) {
+      mostrarMensagem("Selecione a medicação ou prescrição.", "error");
+      document.getElementById("medicacao").focus();
+      return;
+    }
+
+    const botao = document.getElementById("botaoSalvar");
+    botao.disabled = true;
+    botao.textContent = "Salvando...";
+
+    const dadosConsulta = {
+      paciente: nomeDoPaciente(paciente, pacienteSelecionadoIndex),
+      pacienteId: paciente.id || null,
+      diagnostico: diagnostico,
+      medicacao: medicacao,
+      observacoes: observacoes,
+      alergia: paciente.alergia || "",
+      data: new Date().toISOString()
+    };
+
+    try {
+      const resposta = await fetch("/consulta", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dadosConsulta)
+      });
+
+      if (!resposta.ok) {
+        const detalhe = await resposta.text();
+        throw new Error(detalhe || "Não foi possível salvar a consulta.");
+      }
+
+      mostrarMensagem("Consulta registrada com sucesso!");
+
+      document.getElementById("diagnostico").value = "";
+      document.getElementById("medicacao").value = "";
+      document.getElementById("observacoes").value = "";
+
+      limparSelecao();
+
+      await carregar();
+
+    } catch (erro) {
+      console.error("Erro ao salvar consulta:", erro);
+
+      mostrarMensagem(
+        "Não foi possível salvar a consulta. Confira a conexão com o servidor.",
+        "error"
+      );
+    } finally {
+      botao.disabled = false;
+      botao.textContent = "✓ Salvar consulta";
+    }
+  }
+
+  /* PESQUISA E FILTRO */
+
+  document.getElementById("pesquisaPaciente")
+    .addEventListener("input", mostrarPacientes);
+
+  document.getElementById("filtroPrioridade")
+    .addEventListener("change", mostrarPacientes);
+
+  /* MENU */
+
+  document.querySelectorAll(".nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      document.querySelectorAll(".nav-link").forEach(item => {
+        item.classList.remove("active");
+      });
+
+      link.classList.add("active");
+    });
+  });
+
+  /* INICIALIZAÇÃO */
+
+  atualizarDataHora();
+  setInterval(atualizarDataHora, 60000);
+
+  carregar();
+  carregarMedicacoes();
+
+  setInterval(carregar, 30000);
+</script>
+
+</body>
+</html>

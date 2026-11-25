@@ -1,0 +1,836 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f7f4">
+  <title>CLINOVA | Portal de acesso</title>
+
+  <style>
+    :root {
+      --green: #246b55;
+      --green-dark: #174c3e;
+      --mint: #dceee5;
+      --lime: #c9df8a;
+      --ink: #24332d;
+      --muted: #77847d;
+      --line: #e4eae5;
+      --paper: #ffffff;
+      --canvas: #f5f7f4;
+      --red: #b83e49;
+      --blue: #2e6687;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    .shell {
+      width: min(1160px, 100%);
+      min-height: 690px;
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      overflow: hidden;
+      border: 1px solid #e1e8e1;
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: 0 28px 80px rgba(31, 61, 45, .10);
+    }
+
+    /* PAINEL VISUAL */
+
+    .visual {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px;
+      color: white;
+      background: var(--green-dark);
+    }
+
+    .visual::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 580px;
+      height: 580px;
+      right: -260px;
+      bottom: -260px;
+      border: 1px solid rgba(255,255,255,.17);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 42px rgba(255,255,255,.035),
+        0 0 0 90px rgba(255,255,255,.025),
+        0 0 0 145px rgba(255,255,255,.018);
+    }
+
+    .visual::after {
+      content: "+";
+      position: absolute;
+      z-index: -1;
+      top: 145px;
+      right: 75px;
+      color: rgba(201,223,138,.13);
+      font-size: 260px;
+      font-weight: 200;
+      line-height: 1;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-symbol {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--green-dark);
+      background: var(--lime);
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 850;
+      letter-spacing: 2px;
+    }
+
+    .brand-caption {
+      display: block;
+      margin-top: 3px;
+      color: rgba(255,255,255,.64);
+      font-size: 9px;
+      letter-spacing: 2.1px;
+    }
+
+    .visual-main {
+      max-width: 460px;
+      margin: 60px 0;
+    }
+
+    .overline {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 22px;
+      color: var(--lime);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .overline::before {
+      content: "";
+      width: 25px;
+      height: 2px;
+      background: var(--lime);
+    }
+
+    .visual h1 {
+      max-width: 430px;
+      margin-bottom: 20px;
+      font-size: clamp(38px, 4.7vw, 58px);
+      line-height: 1.04;
+      letter-spacing: -2.4px;
+    }
+
+    .visual h1 em {
+      color: var(--lime);
+      font-style: normal;
+    }
+
+    .visual-description {
+      max-width: 390px;
+      color: rgba(255,255,255,.72);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 34px;
+    }
+
+    .highlight {
+      padding: 10px 13px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 30px;
+      color: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.07);
+      font-size: 10px;
+      letter-spacing: .2px;
+    }
+
+    .visual-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: rgba(255,255,255,.52);
+      font-size: 10px;
+    }
+
+    .visual-footer span:last-child {
+      color: var(--lime);
+      letter-spacing: 1.5px;
+      font-weight: 750;
+    }
+
+    /* ÁREA DE LOGIN */
+
+    .access {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px clamp(34px, 5.5vw, 72px);
+    }
+
+    .access-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 36px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .access-top .lock {
+      width: 29px;
+      height: 29px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--mint);
+      font-size: 14px;
+    }
+
+    .access h2 {
+      margin-bottom: 11px;
+      color: #1d3028;
+      font-size: 32px;
+      letter-spacing: -1.2px;
+    }
+
+    .intro {
+      max-width: 340px;
+      margin-bottom: 35px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 9px;
+      color: #35473e;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .field {
+      margin-bottom: 21px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      height: 54px;
+      padding: 0 48px 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      color: var(--ink);
+      background: #fafcf9;
+      font: inherit;
+      font-size: 13px;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    .input-wrap input::placeholder {
+      color: #a4afa8;
+    }
+
+    .input-wrap input:focus {
+      border-color: #6ba58b;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(36,107,85,.09);
+    }
+
+    .input-icon {
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      color: #91a097;
+      pointer-events: none;
+      font-size: 15px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      width: 36px;
+      height: 36px;
+      transform: translateY(-50%);
+      border: 0;
+      border-radius: 9px;
+      color: #718078;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .password-toggle:hover {
+      color: var(--green);
+      background: var(--mint);
+    }
+
+    .submit {
+      width: 100%;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 12px;
+      color: white;
+      background: var(--green);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+
+    .submit:hover {
+      transform: translateY(-2px);
+      background: #1d5d49;
+      box-shadow: 0 10px 22px rgba(36,107,85,.2);
+    }
+
+    .submit:disabled {
+      cursor: wait;
+      opacity: .65;
+      transform: none;
+    }
+
+    .submit .arrow {
+      font-size: 18px;
+      transition: transform .2s;
+    }
+
+    .submit:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* MENSAGENS */
+
+    #mensagem {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    #mensagem.erro {
+      display: block;
+      color: var(--red);
+      background: #fff0f1;
+      border: 1px solid #f2d0d3;
+    }
+
+    #mensagem.carregando {
+      display: block;
+      color: var(--blue);
+      background: #eef6fb;
+      border: 1px solid #d5e7f2;
+    }
+
+    #mensagem.sucesso {
+      display: block;
+      color: var(--green);
+      background: #edf8f1;
+      border: 1px solid #d1ead9;
+    }
+
+    .access-bottom {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: #8a978f;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .access-bottom .shield {
+      color: var(--green);
+      font-size: 16px;
+    }
+
+    .copyright {
+      margin-top: 27px;
+      color: #a3ada6;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #a7d2b7;
+      outline-offset: 3px;
+    }
+
+    /* RESPONSIVIDADE */
+
+    @media (max-width: 820px) {
+      body {
+        padding: 20px;
+      }
+
+      .shell {
+        min-height: 640px;
+      }
+
+      .visual {
+        padding: 34px;
+      }
+
+      .access {
+        padding: 42px 32px;
+      }
+
+      .visual h1 {
+        font-size: 42px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        display: block;
+        padding: 14px;
+      }
+
+      .shell {
+        max-width: 490px;
+        min-height: 0;
+        margin: 0 auto;
+        grid-template-columns: 1fr;
+        border-radius: 21px;
+      }
+
+      .visual {
+        min-height: 370px;
+        padding: 27px;
+      }
+
+      .visual-main {
+        margin: 45px 0 35px;
+      }
+
+      .visual h1 {
+        max-width: 360px;
+        font-size: 39px;
+      }
+
+      .visual-description {
+        font-size: 12px;
+      }
+
+      .visual-footer {
+        font-size: 9px;
+      }
+
+      .access {
+        padding: 34px 27px 28px;
+      }
+
+      .access-top {
+        margin-bottom: 26px;
+      }
+
+      .intro {
+        margin-bottom: 28px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      body {
+        padding: 9px;
+      }
+
+      .visual {
+        min-height: 350px;
+        padding: 23px;
+      }
+
+      .visual h1 {
+        font-size: 34px;
+      }
+
+      .access {
+        padding: 29px 21px 24px;
+      }
+
+      .access h2 {
+        font-size: 28px;
+      }
+
+      .highlights {
+        gap: 7px;
+      }
+
+      .highlight {
+        padding: 8px 10px;
+        font-size: 9px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+
+    <!-- PAINEL DE APRESENTAÇÃO -->
+    <section class="visual" aria-label="Apresentação do sistema">
+
+      <header class="brand">
+        <div class="brand-symbol" aria-hidden="true">+</div>
+
+        <div>
+          <div class="brand-name">CLINOVA</div>
+          <span class="brand-caption">PLATAFORMA HOSPITALAR</span>
+        </div>
+      </header>
+
+      <div class="visual-main">
+
+        <div class="overline">
+          Gestão que aproxima pessoas
+        </div>
+
+        <h1>
+          Mais clareza para <em>cuidar melhor.</em>
+        </h1>
+
+        <p class="visual-description">
+          Um ambiente digital para apoiar os profissionais,
+          organizar informações e tornar os processos
+          hospitalares mais simples.
+        </p>
+
+        <div class="highlights">
+          <span class="highlight">● Fluxos integrados</span>
+          <span class="highlight">● Equipes conectadas</span>
+          <span class="highlight">● Dados organizados</span>
+        </div>
+
+      </div>
+
+      <footer class="visual-footer">
+        <span>Uma experiência de trabalho mais fluida.</span>
+        <span>CLINOVA / 2026</span>
+      </footer>
+
+    </section>
+
+    <!-- ÁREA DE LOGIN -->
+    <section class="access">
+
+      <div class="access-top">
+        <span class="lock" aria-hidden="true">⌑</span>
+        PORTAL DO PROFISSIONAL
+      </div>
+
+      <h2>Acesse sua conta</h2>
+
+      <p class="intro">
+        Utilize suas credenciais institucionais para entrar
+        no ambiente de trabalho.
+      </p>
+
+      <form id="loginForm">
+
+        <div class="field">
+          <label class="form-label" for="usuario">
+            Identificação de usuário
+          </label>
+
+          <div class="input-wrap">
+            <input
+              id="usuario"
+              name="usuario"
+              type="text"
+              placeholder="Digite seu usuário"
+              autocomplete="username"
+              required
+            >
+
+            <span class="input-icon" aria-hidden="true">♙</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="form-label" for="senha">
+            Senha de acesso
+          </label>
+
+          <div class="input-wrap">
+            <input
+              id="senha"
+              name="senha"
+              type="password"
+              placeholder="Digite sua senha"
+              autocomplete="current-password"
+              required
+            >
+
+            <button
+              class="password-toggle"
+              type="button"
+              id="botaoMostrarSenha"
+              aria-label="Mostrar senha"
+              aria-pressed="false"
+              title="Mostrar ou ocultar senha"
+            >◉</button>
+          </div>
+        </div>
+
+        <button
+          class="submit"
+          type="submit"
+          id="botaoEntrar"
+        >
+          <span id="textoBotao">Entrar no sistema</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+
+      </form>
+
+      <div id="mensagem" role="status" aria-live="polite"></div>
+
+      <div class="access-bottom">
+        <span class="shield" aria-hidden="true">▣</span>
+        <span>
+          Este ambiente é destinado exclusivamente
+          a profissionais autorizados.
+        </span>
+      </div>
+
+      <div class="copyright">
+        CLINOVA · Sistema de Gestão Hospitalar · 2026
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    const formulario = document.getElementById("loginForm");
+    const usuario = document.getElementById("usuario");
+    const senha = document.getElementById("senha");
+    const mensagem = document.getElementById("mensagem");
+    const botao = document.getElementById("botaoEntrar");
+    const textoBotao = document.getElementById("textoBotao");
+    const botaoMostrarSenha =
+      document.getElementById("botaoMostrarSenha");
+
+    // MOSTRAR OU OCULTAR SENHA
+    botaoMostrarSenha.addEventListener("click", () => {
+      const mostrar = senha.type === "password";
+
+      senha.type = mostrar ? "text" : "password";
+
+      botaoMostrarSenha.setAttribute(
+        "aria-label",
+        mostrar ? "Ocultar senha" : "Mostrar senha"
+      );
+
+      botaoMostrarSenha.setAttribute(
+        "aria-pressed",
+        String(mostrar)
+      );
+    });
+
+    // EXIBIR MENSAGENS NA TELA
+    function mostrarMensagem(texto, tipo) {
+      mensagem.textContent = texto;
+      mensagem.className = tipo;
+    }
+
+    // RESTAURAR BOTÃO
+    function restaurarBotao() {
+      botao.disabled = false;
+      textoBotao.textContent = "Entrar no sistema";
+    }
+
+    // ENVIAR FORMULÁRIO
+    formulario.addEventListener("submit", login);
+
+    async function login(evento) {
+      evento.preventDefault();
+
+      const usuarioValor = usuario.value.trim();
+      const senhaValor = senha.value;
+
+      if (!usuarioValor || !senhaValor) {
+        mostrarMensagem(
+          "Informe seu usuário e sua senha.",
+          "erro"
+        );
+        return;
+      }
+
+      botao.disabled = true;
+      textoBotao.textContent = "Validando acesso...";
+
+      mostrarMensagem(
+        "Aguarde enquanto verificamos seus dados.",
+        "carregando"
+      );
+
+      // ACESSO LOCAL DA TELA DE TV
+      if (
+        usuarioValor.toLowerCase() === "tv" &&
+        senhaValor === "123"
+      ) {
+        mostrarMensagem(
+          "Acesso autorizado. Abrindo painel...",
+          "sucesso"
+        );
+
+        window.location.href = "tv.html";
+        return;
+      }
+
+      try {
+        // COMUNICAÇÃO COM O BACKEND
+        const resposta = await fetch("/login", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            usuario: usuarioValor,
+            senha: senhaValor
+          })
+        });
+
+        let data;
+
+        try {
+          data = await resposta.json();
+        } catch {
+          data = {};
+        }
+
+        if (!resposta.ok) {
+          throw new Error(
+            data.mensagem || "Usuário ou senha inválidos."
+          );
+        }
+
+        // REDIRECIONAMENTO DE ACORDO COM O PERFIL
+        switch (data.tipo) {
+
+          case "triagem":
+            window.location.href = "triagem.html";
+            return;
+
+          case "medico":
+            window.location.href = "medico.html";
+            return;
+
+          case "atendimento":
+            window.location.href = "atendimento.html";
+            return;
+
+          case "tv":
+            window.location.href = "tv.html";
+            return;
+
+          default:
+            throw new Error(
+              "Perfil de usuário não reconhecido."
+            );
+        }
+
+      } catch (erro) {
+        console.error("Falha no acesso:", erro);
+
+        mostrarMensagem(
+          erro.message ||
+          "Não foi possível conectar ao servidor.",
+          "erro"
+        );
+
+        restaurarBotao();
+      }
+    }
+
+    // ENTER NO CAMPO DE USUÁRIO VAI PARA A SENHA
+    usuario.addEventListener("keydown", (evento) => {
+      if (evento.key === "Enter") {
+        evento.preventDefault();
+        senha.focus();
+      }
+    });
+
+    // ATALHO ADMINISTRATIVO
+    window.addEventListener("keydown", (evento) => {
+      if (
+        evento.ctrlKey &&
+        evento.altKey &&
+        evento.key.toLowerCase() === "a"
+      ) {
+        evento.preventDefault();
+        window.location.href = "admin.html";
+      }
+    });
+  </script>
+</body>
+</html>

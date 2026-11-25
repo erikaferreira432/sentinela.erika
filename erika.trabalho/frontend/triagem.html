@@ -1,0 +1,1486 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLINOVA | Triagem</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --verde: #087f5b;
+      --verde-claro: #e6f5ef;
+      --verde-escuro: #075c43;
+      --grafite: #202d2a;
+      --texto: #34443f;
+      --cinza: #7c8985;
+      --fundo: #f3f7f5;
+      --branco: #fff;
+      --borda: #e1eae5;
+      --vermelho: #d94343;
+      --laranja: #d99025;
+      --sombra: 0 8px 28px rgba(25, 55, 43, .06);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button, a, input, select, textarea {
+      outline-offset: 3px;
+    }
+
+    /* CABEÇALHO */
+
+    .topbar {
+      min-height: 76px;
+      padding: 14px 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--branco);
+      border-bottom: 1px solid var(--borda);
+      position: relative;
+      z-index: 5;
+    }
+
+    .marca {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 25px;
+      font-weight: 800;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #0a9b70, #075c43);
+      box-shadow: 0 5px 14px rgba(8, 127, 91, .2);
+    }
+
+    .marca h1 {
+      color: var(--grafite);
+      font-size: 21px;
+      letter-spacing: -.8px;
+    }
+
+    .marca h1 span {
+      color: var(--verde);
+    }
+
+    .marca p {
+      margin-top: 3px;
+      color: var(--cinza);
+      font-size: 10px;
+      letter-spacing: .3px;
+    }
+
+    .usuario-status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 15px;
+      color: var(--verde-escuro);
+      background: var(--verde-claro);
+      border: 1px solid #ccebdd;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-bolinha {
+      width: 8px;
+      height: 8px;
+      background: #16a36a;
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(22, 163, 106, .1);
+    }
+
+    /* ESTRUTURA */
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 76px);
+    }
+
+    .sidebar {
+      width: 245px;
+      flex-shrink: 0;
+      padding: 28px 17px;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-right: 1px solid var(--borda);
+    }
+
+    .sidebar-label {
+      padding: 0 12px;
+      margin-bottom: 14px;
+      color: #9aa7a1;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 12px;
+      color: #687771;
+      text-decoration: none;
+      border-radius: 11px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .nav-link:hover {
+      color: var(--verde);
+      background: #f0f8f4;
+    }
+
+    .nav-link.ativo {
+      color: var(--verde-escuro);
+      background: var(--verde-claro);
+      box-shadow: inset 3px 0 var(--verde);
+    }
+
+    .nav-icone {
+      width: 24px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .sidebar-ajuda {
+      margin-top: auto;
+      padding: 17px;
+      background: #f0f8f4;
+      border: 1px solid #dceee4;
+      border-radius: 13px;
+    }
+
+    .sidebar-ajuda strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--verde-escuro);
+      font-size: 12px;
+    }
+
+    .sidebar-ajuda p {
+      color: #71827a;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    /* CONTEÚDO */
+
+    .conteudo {
+      flex: 1;
+      min-width: 0;
+      padding: 31px;
+    }
+
+    .cabecalho-pagina {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .sobretitulo {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--verde);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .titulo-pagina h2 {
+      color: var(--grafite);
+      font-size: clamp(24px, 3vw, 31px);
+      letter-spacing: -1px;
+    }
+
+    .titulo-pagina p {
+      margin-top: 8px;
+      color: var(--cinza);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 12px 16px;
+      color: var(--grafite);
+      background: white;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn-voltar:hover {
+      color: var(--verde);
+      border-color: #9bd4b9;
+      transform: translateY(-2px);
+    }
+
+    /* BANNER */
+
+    .banner {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 26px 29px;
+      margin-bottom: 24px;
+      color: white;
+      border-radius: 17px;
+      background: linear-gradient(115deg, #064c39, #087f5b 65%, #20a879);
+      box-shadow: 0 9px 25px rgba(8, 127, 91, .14);
+    }
+
+    .banner::after {
+      content: "✚";
+      position: absolute;
+      top: -42px;
+      right: 30px;
+      color: rgba(255,255,255,.07);
+      font-size: 155px;
+      pointer-events: none;
+    }
+
+    .banner-conteudo {
+      position: relative;
+      z-index: 1;
+    }
+
+    .banner h3 {
+      margin-bottom: 8px;
+      font-size: 19px;
+    }
+
+    .banner p {
+      max-width: 570px;
+      color: #e1f5ec;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .banner-icone {
+      width: 55px;
+      height: 55px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 15px;
+      font-size: 27px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* COLUNAS */
+
+    .grade-conteudo {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(250px, .85fr);
+      gap: 23px;
+      align-items: start;
+    }
+
+    .cartao, .indicador, .passos {
+      min-width: 0;
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+      box-shadow: var(--sombra);
+    }
+
+    .cartao-cabecalho {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding-bottom: 19px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid #edf2ee;
+    }
+
+    .cartao-icone {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--verde);
+      background: var(--verde-claro);
+      border-radius: 12px;
+      font-size: 21px;
+    }
+
+    .cartao-cabecalho h3 {
+      color: var(--grafite);
+      font-size: 15px;
+    }
+
+    .cartao-cabecalho p {
+      margin-top: 5px;
+      color: var(--cinza);
+      font-size: 10px;
+    }
+
+    /* FORMULÁRIO */
+
+    .secao-formulario {
+      margin-bottom: 24px;
+      scroll-margin-top: 20px;
+    }
+
+    .secao-titulo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 17px;
+      color: var(--grafite);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .secao-numero {
+      width: 27px;
+      height: 27px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--verde);
+      background: var(--verde-claro);
+      border-radius: 8px;
+      font-size: 11px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .campo {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .campo.largo {
+      grid-column: 1 / -1;
+    }
+
+    .campo label {
+      color: #405149;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .obrigatorio {
+      color: var(--vermelho);
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+      width: 100%;
+      min-height: 45px;
+      padding: 12px 13px;
+      color: var(--texto);
+      background: #fafcfb;
+      border: 1px solid #dce7e0;
+      border-radius: 9px;
+      font-size: 12px;
+      transition: .2s;
+    }
+
+    .campo textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .campo input::placeholder,
+    .campo textarea::placeholder {
+      color: #a1ada6;
+    }
+
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+      outline: none;
+      background: white;
+      border-color: var(--verde);
+      box-shadow: 0 0 0 3px rgba(8,127,91,.09);
+    }
+
+    .campo small {
+      color: var(--cinza);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .campo-escondido {
+      display: none;
+    }
+
+    .divisor {
+      height: 1px;
+      margin: 24px 0;
+      background: #edf2ee;
+    }
+
+    .acoes-formulario {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 11px;
+      padding-top: 6px;
+    }
+
+    .btn-secundario, .btn-salvar {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 17px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn-secundario {
+      color: #53645b;
+      background: white;
+      border: 1px solid var(--borda);
+    }
+
+    .btn-secundario:hover {
+      background: #f3f7f4;
+    }
+
+    .btn-salvar {
+      color: white;
+      background: linear-gradient(110deg, #087f5b, #0b9b6d);
+      border: 1px solid var(--verde);
+      box-shadow: 0 5px 13px rgba(8,127,91,.16);
+    }
+
+    .btn-salvar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 17px rgba(8,127,91,.22);
+    }
+
+    .btn-salvar:disabled {
+      opacity: .65;
+      cursor: wait;
+      transform: none;
+    }
+
+    /* PAINEL LATERAL */
+
+    .painel-info {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .indicador-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 17px;
+    }
+
+    .indicador-topo h3 {
+      color: var(--grafite);
+      font-size: 14px;
+    }
+
+    .indicador-simbolo {
+      width: 37px;
+      height: 37px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--verde);
+      background: var(--verde-claro);
+      border-radius: 10px;
+      font-size: 19px;
+    }
+
+    .status-avaliacao {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      color: #21794f;
+      background: #eaf8f0;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .status-avaliacao.atencao {
+      color: #a86609;
+      background: #fff4df;
+    }
+
+    .status-avaliacao.alerta {
+      color: #bd2736;
+      background: #ffebed;
+    }
+
+    .indicador-texto {
+      margin-top: 13px;
+      color: #718078;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .temperatura-visual {
+      margin-top: 18px;
+      padding: 15px;
+      background: #f7faf8;
+      border: 1px solid #e6eee9;
+      border-radius: 12px;
+    }
+
+    .temperatura-visual .rotulo {
+      display: block;
+      margin-bottom: 7px;
+      color: #7b8a82;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .temperatura-valor {
+      color: var(--verde-escuro);
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .temperatura-valor small {
+      color: #7b8a82;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .barra-temperatura {
+      height: 7px;
+      overflow: hidden;
+      margin-top: 13px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #47bd8b 0%, #a6d85a 35%, #f0c24b 65%, #e45b63 100%);
+    }
+
+    .marcadores-temperatura {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      color: #88958e;
+      font-size: 9px;
+    }
+
+    .aviso-medico {
+      padding: 17px;
+      background: #fff9eb;
+      border: 1px solid #f2dfb5;
+      border-radius: 13px;
+    }
+
+    .aviso-medico strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #94620c;
+      font-size: 12px;
+    }
+
+    .aviso-medico p {
+      color: #806e4b;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .passos h3 {
+      margin-bottom: 17px;
+      color: var(--grafite);
+      font-size: 14px;
+    }
+
+    .passo {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 16px;
+    }
+
+    .passo:last-child {
+      margin-bottom: 0;
+    }
+
+    .passo-icone {
+      width: 29px;
+      height: 29px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--verde);
+      background: var(--verde-claro);
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .passo strong {
+      display: block;
+      margin: 2px 0 5px;
+      color: #405149;
+      font-size: 11px;
+    }
+
+    .passo p {
+      color: #819087;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    /* RODAPÉ */
+
+    .rodape {
+      padding: 24px 0 5px;
+      color: #8a9890;
+      text-align: center;
+      font-size: 10px;
+    }
+
+    /* NOTIFICAÇÕES */
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 100;
+      display: flex;
+      align-items: flex-start;
+      width: min(390px, calc(100% - 32px));
+      padding: 16px 18px;
+      background: white;
+      border: 1px solid var(--borda);
+      border-left: 4px solid var(--verde);
+      border-radius: 12px;
+      box-shadow: 0 12px 35px rgba(20,45,35,.15);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: .25s;
+    }
+
+    .toast.visivel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .toast.erro {
+      border-left-color: var(--vermelho);
+    }
+
+    .toast strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--grafite);
+      font-size: 12px;
+    }
+
+    .toast p {
+      color: #68786f;
+      font-size: 11px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    /* RESPONSIVIDADE */
+
+    @media (max-width: 1100px) {
+      .grade-conteudo {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .painel-info {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+      }
+
+      .indicador {
+        grid-row: span 2;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .topbar {
+        padding: 14px 20px;
+      }
+
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        padding: 12px 16px;
+        border-right: 0;
+        border-bottom: 1px solid var(--borda);
+      }
+
+      .sidebar-label, .sidebar-ajuda {
+        display: none;
+      }
+
+      .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .nav-link {
+        padding: 10px;
+        font-size: 11px;
+      }
+
+      .nav-link.ativo {
+        box-shadow: inset 0 -3px var(--verde);
+      }
+
+      .nav-icone {
+        font-size: 15px;
+        width: auto;
+      }
+
+      .conteudo {
+        padding: 23px 20px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        padding: 13px 15px;
+      }
+
+      .marca h1 {
+        font-size: 17px;
+      }
+
+      .marca p {
+        font-size: 9px;
+      }
+
+      .logo {
+        width: 38px;
+        height: 38px;
+      }
+
+      .usuario-status {
+        padding: 8px 10px;
+        font-size: 9px;
+      }
+
+      .conteudo {
+        padding: 20px 13px;
+      }
+
+      .cabecalho-pagina {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .btn-voltar {
+        order: -1;
+      }
+
+      .banner {
+        padding: 20px;
+      }
+
+      .banner h3 {
+        font-size: 16px;
+      }
+
+      .banner-icone {
+        width: 43px;
+        height: 43px;
+        font-size: 22px;
+      }
+
+      .cartao, .indicador, .passos {
+        padding: 19px 15px;
+      }
+
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .campo.largo {
+        grid-column: auto;
+      }
+
+      .painel-info {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .indicador {
+        grid-row: auto;
+      }
+
+      .acoes-formulario {
+        flex-direction: column-reverse;
+      }
+
+      .btn-secundario, .btn-salvar {
+        width: 100%;
+      }
+
+      .sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav-link {
+        font-size: 10px;
+      }
+
+      .toast {
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="marca">
+      <div class="logo">✚</div>
+      <div>
+        <h1>CLIN<span>OVA</span></h1>
+        <p>Sistema inteligente de gestão hospitalar</p>
+      </div>
+    </div>
+
+    <div class="usuario-status">
+      <span class="status-bolinha"></span>
+      Sistema ativo
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <p class="sidebar-label">Menu de navegação</p>
+
+      <nav aria-label="Navegação da triagem">
+        <a class="nav-link ativo" href="#inicio">
+          <span class="nav-icone">✚</span>
+          Triagem
+        </a>
+
+        <a class="nav-link" href="#identificacao">
+          <span class="nav-icone">♙</span>
+          Identificação
+        </a>
+
+        <a class="nav-link" href="#avaliacao">
+          <span class="nav-icone">♡</span>
+          Avaliação inicial
+        </a>
+
+        <a class="nav-link" href="#observacoes">
+          <span class="nav-icone">▤</span>
+          Observações
+        </a>
+      </nav>
+
+      <div class="sidebar-ajuda">
+        <strong>ⓘ Segurança das informações</strong>
+        <p>
+          Confira os dados antes de finalizar o registro.
+          As informações devem ser tratadas com responsabilidade
+          pela equipe hospitalar.
+        </p>
+      </div>
+    </aside>
+
+    <main class="conteudo" id="inicio">
+
+      <div class="cabecalho-pagina">
+        <div class="titulo-pagina">
+          <span class="sobretitulo">Central de atendimento</span>
+          <h2>Triagem de pacientes</h2>
+          <p>
+            Cadastre as informações iniciais do paciente e encaminhe
+            os dados para a equipe responsável.
+          </p>
+        </div>
+
+        <button type="button" class="btn-voltar" onclick="voltarPagina()">
+          ← Voltar
+        </button>
+      </div>
+
+      <section class="banner">
+        <div class="banner-conteudo">
+          <h3>Bem-vindo à área de triagem</h3>
+          <p>
+            Utilize este espaço para registrar os dados iniciais do atendimento.
+            Preencha as informações com atenção e confira tudo antes de enviar.
+          </p>
+        </div>
+
+        <div class="banner-icone">♡</div>
+      </section>
+
+      <div class="grade-conteudo">
+
+        <section class="cartao">
+
+          <div class="cartao-cabecalho">
+            <div class="cartao-icone">♙</div>
+            <div>
+              <h3>Ficha de atendimento</h3>
+              <p>Preencha os campos para registrar a triagem do paciente.</p>
+            </div>
+          </div>
+
+          <form id="formTriagem">
+
+            <section class="secao-formulario" id="identificacao">
+              <h4 class="secao-titulo">
+                <span class="secao-numero">01</span>
+                Identificação do paciente
+              </h4>
+
+              <div class="form-grid">
+                <div class="campo largo">
+                  <label for="nome">
+                    Nome completo <span class="obrigatorio">*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite o nome completo do paciente"
+                    autocomplete="name"
+                    required
+                  >
+                </div>
+              </div>
+            </section>
+
+            <div class="divisor"></div>
+
+            <section class="secao-formulario" id="avaliacao">
+              <h4 class="secao-titulo">
+                <span class="secao-numero">02</span>
+                Avaliação inicial
+              </h4>
+
+              <div class="form-grid">
+
+                <div class="campo largo">
+                  <label for="sintoma">
+                    Sintomas relatados <span class="obrigatorio">*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    id="sintoma"
+                    name="sintoma"
+                    placeholder="Ex.: dor de cabeça, febre, tontura..."
+                    required
+                  >
+
+                  <small>
+                    Registre os sintomas informados pelo paciente.
+                  </small>
+                </div>
+
+                <div class="campo">
+                  <label for="temperatura">Temperatura (°C)</label>
+
+                  <input
+                    type="number"
+                    id="temperatura"
+                    name="temperatura"
+                    placeholder="Ex.: 36.5"
+                    min="30"
+                    max="45"
+                    step="0.1"
+                    inputmode="decimal"
+                  >
+
+                  <small>
+                    Informe a temperatura caso tenha sido medida.
+                  </small>
+                </div>
+
+                <div class="campo">
+                  <label for="alergia">
+                    Alergias conhecidas <span class="obrigatorio">*</span>
+                  </label>
+
+                  <select id="alergia" name="alergia" required>
+                    <option value="">Selecione uma opção</option>
+                    <option value="Não informada">Não informada</option>
+                    <option value="Nenhuma relatada">Nenhuma relatada</option>
+                    <option value="Sim">Sim, possui alergia</option>
+                  </select>
+                </div>
+
+                <div class="campo largo campo-escondido" id="campoDetalheAlergia">
+                  <label for="detalheAlergia">
+                    Qual alergia foi relatada?
+                  </label>
+
+                  <input
+                    type="text"
+                    id="detalheAlergia"
+                    name="detalheAlergia"
+                    placeholder="Informe a alergia mencionada"
+                  >
+                </div>
+
+              </div>
+            </section>
+
+            <div class="divisor"></div>
+
+            <section class="secao-formulario" id="observacoes">
+              <h4 class="secao-titulo">
+                <span class="secao-numero">03</span>
+                Observações adicionais
+              </h4>
+
+              <div class="form-grid">
+                <div class="campo largo">
+                  <label for="observacao">Observações</label>
+
+                  <textarea
+                    id="observacao"
+                    name="observacao"
+                    placeholder="Registre informações adicionais importantes..."
+                  ></textarea>
+                </div>
+              </div>
+            </section>
+
+            <div class="divisor"></div>
+
+            <div class="acoes-formulario">
+              <button type="reset" class="btn-secundario">
+                ↺ Limpar formulário
+              </button>
+
+              <button type="submit" class="btn-salvar" id="btnSalvar">
+                ✓ Registrar triagem
+              </button>
+            </div>
+
+          </form>
+        </section>
+
+        <aside class="painel-info">
+
+          <section class="indicador">
+            <div class="indicador-topo">
+              <h3>Resumo informativo</h3>
+              <div class="indicador-simbolo">⌁</div>
+            </div>
+
+            <span class="status-avaliacao" id="statusAvaliacao">
+              ● Aguardando dados
+            </span>
+
+            <p class="indicador-texto" id="textoAvaliacao" aria-live="polite">
+              Preencha os sintomas e a temperatura para atualizar
+              este painel informativo.
+            </p>
+
+            <div class="temperatura-visual">
+              <span class="rotulo">Temperatura informada</span>
+
+              <div class="temperatura-valor">
+                <span id="temperaturaValor">--</span>
+                <small>°C</small>
+              </div>
+
+              <div class="barra-temperatura"></div>
+
+              <div class="marcadores-temperatura">
+                <span>Baixa</span>
+                <span>Referência</span>
+                <span>Elevada</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="aviso-medico">
+            <strong>⚠ Informação importante</strong>
+            <p>
+              Este painel é apenas informativo. Ele não realiza diagnósticos
+              nem determina prioridade clínica. A avaliação deve ser feita
+              pela equipe de saúde responsável.
+            </p>
+          </section>
+
+          <section class="passos">
+            <h3>Etapas do atendimento</h3>
+
+            <div class="passo">
+              <div class="passo-icone">01</div>
+              <div>
+                <strong>Identificação</strong>
+                <p>Informe corretamente o nome do paciente.</p>
+              </div>
+            </div>
+
+            <div class="passo">
+              <div class="passo-icone">02</div>
+              <div>
+                <strong>Coleta de informações</strong>
+                <p>Registre sintomas, temperatura e alergias relatadas.</p>
+              </div>
+            </div>
+
+            <div class="passo">
+              <div class="passo-icone">03</div>
+              <div>
+                <strong>Conferência</strong>
+                <p>Confira os dados antes de finalizar o formulário.</p>
+              </div>
+            </div>
+
+            <div class="passo">
+              <div class="passo-icone">04</div>
+              <div>
+                <strong>Envio</strong>
+                <p>Encaminhe as informações para o sistema hospitalar.</p>
+              </div>
+            </div>
+          </section>
+
+        </aside>
+      </div>
+
+      <footer class="rodape">
+        CLINOVA © 2026 — Sistema de Gestão Hospitalar
+      </footer>
+
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <div>
+      <strong id="toastTitulo">Aviso</strong>
+      <p id="toastMensagem"></p>
+    </div>
+  </div>
+
+  <script>
+    const formTriagem = document.getElementById("formTriagem");
+
+    const nome = document.getElementById("nome");
+    const sintoma = document.getElementById("sintoma");
+    const temperatura = document.getElementById("temperatura");
+    const alergia = document.getElementById("alergia");
+    const detalheAlergia = document.getElementById("detalheAlergia");
+    const campoDetalheAlergia = document.getElementById("campoDetalheAlergia");
+    const observacao = document.getElementById("observacao");
+
+    const statusAvaliacao = document.getElementById("statusAvaliacao");
+    const textoAvaliacao = document.getElementById("textoAvaliacao");
+    const temperaturaValor = document.getElementById("temperaturaValor");
+    const btnSalvar = document.getElementById("btnSalvar");
+
+    let temporizadorToast;
+
+    // NOTIFICAÇÕES
+
+    function mostrarToast(mensagem, erro = false) {
+      const toast = document.getElementById("toast");
+      const titulo = document.getElementById("toastTitulo");
+      const texto = document.getElementById("toastMensagem");
+
+      clearTimeout(temporizadorToast);
+
+      titulo.textContent = erro ? "Atenção" : "Sucesso";
+      texto.textContent = mensagem;
+
+      toast.classList.toggle("erro", erro);
+      toast.classList.add("visivel");
+
+      temporizadorToast = setTimeout(() => {
+        toast.classList.remove("visivel");
+      }, 4500);
+    }
+
+    // VOLTAR
+
+    function voltarPagina() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        mostrarToast(
+          "Não existe uma página anterior nesta navegação.",
+          true
+        );
+      }
+    }
+
+    // CAMPO DE ALERGIA
+
+    function atualizarAlergia() {
+      const possuiAlergia = alergia.value === "Sim";
+
+      campoDetalheAlergia.classList.toggle(
+        "campo-escondido",
+        !possuiAlergia
+      );
+
+      detalheAlergia.required = possuiAlergia;
+
+      if (!possuiAlergia) {
+        detalheAlergia.value = "";
+      }
+    }
+
+    alergia.addEventListener("change", atualizarAlergia);
+
+    // PAINEL DE TEMPERATURA E INFORMAÇÕES
+
+    function atualizarIndicador() {
+      const valorTemperatura = temperatura.value.trim();
+
+      const valor = valorTemperatura === ""
+        ? null
+        : Number(valorTemperatura);
+
+      const sintomaTexto = sintoma.value.trim();
+
+      statusAvaliacao.classList.remove("atencao", "alerta");
+
+      if (valor === null || !Number.isFinite(valor)) {
+        temperaturaValor.textContent = "--";
+      } else {
+        temperaturaValor.textContent = valor.toFixed(1);
+      }
+
+      if (valor !== null && (valor < 30 || valor > 45)) {
+        statusAvaliacao.textContent = "● Verifique o valor";
+        statusAvaliacao.classList.add("atencao");
+
+        textoAvaliacao.textContent =
+          "O valor informado parece estar fora do intervalo esperado para esta medição. Confira o dado digitado.";
+
+        return;
+      }
+
+      if (valor !== null && valor >= 39) {
+        statusAvaliacao.textContent = "● Atenção";
+        statusAvaliacao.classList.add("alerta");
+
+        textoAvaliacao.textContent =
+          "A temperatura informada está elevada. Solicite avaliação da equipe de saúde responsável.";
+
+        return;
+      }
+
+      if (valor !== null && valor >= 37.8) {
+        statusAvaliacao.textContent = "● Observar";
+        statusAvaliacao.classList.add("atencao");
+
+        textoAvaliacao.textContent =
+          "A temperatura informada merece atenção. Considere o quadro completo e siga o protocolo da equipe de saúde.";
+
+        return;
+      }
+
+      if (sintomaTexto !== "") {
+        statusAvaliacao.textContent = "● Dados informados";
+
+        textoAvaliacao.textContent =
+          "Os sintomas foram preenchidos. A interpretação clínica e a definição da prioridade cabem à equipe responsável.";
+
+        return;
+      }
+
+      statusAvaliacao.textContent = "● Aguardando dados";
+
+      textoAvaliacao.textContent =
+        "Preencha os sintomas e a temperatura para atualizar este painel informativo.";
+    }
+
+    temperatura.addEventListener("input", atualizarIndicador);
+    sintoma.addEventListener("input", atualizarIndicador);
+
+    // LIMPAR FORMULÁRIO
+
+    formTriagem.addEventListener("reset", () => {
+      setTimeout(() => {
+        atualizarAlergia();
+        atualizarIndicador();
+      }, 0);
+    });
+
+    // ENVIAR TRIAGEM
+
+    formTriagem.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+
+      if (!formTriagem.checkValidity()) {
+        formTriagem.reportValidity();
+        return;
+      }
+
+      const dados = {
+        nome: nome.value.trim(),
+        sintoma: sintoma.value.trim(),
+
+        temperatura: temperatura.value.trim() === ""
+          ? ""
+          : Number(temperatura.value),
+
+        alergia: alergia.value === "Sim"
+          ? detalheAlergia.value.trim()
+          : alergia.value,
+
+        observacao: observacao.value.trim()
+      };
+
+      if (!dados.nome || !dados.sintoma) {
+        mostrarToast("Preencha os campos obrigatórios.", true);
+        return;
+      }
+
+      btnSalvar.disabled = true;
+      btnSalvar.textContent = "Enviando...";
+
+      try {
+        const resposta = await fetch("http://localhost:3000/triagem", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dados)
+        });
+
+        const resultado = await resposta.json().catch(() => ({}));
+
+        if (!resposta.ok) {
+          throw new Error(
+            resultado.mensagem ||
+            resultado.erro ||
+            "Não foi possível registrar a triagem."
+          );
+        }
+
+        mostrarToast(
+          resultado.mensagem || "Triagem registrada com sucesso!"
+        );
+
+        formTriagem.reset();
+        atualizarAlergia();
+        atualizarIndicador();
+
+      } catch (erro) {
+        console.error("Erro ao registrar triagem:", erro);
+
+        mostrarToast(
+          erro.message ||
+          "Não foi possível conectar ao servidor. Verifique se o backend está funcionando.",
+          true
+        );
+
+      } finally {
+        btnSalvar.disabled = false;
+        btnSalvar.textContent = "✓ Registrar triagem";
+      }
+    });
+
+    // MENU LATERAL
+
+    document.querySelectorAll(".sidebar .nav-link").forEach(link => {
+      link.addEventListener("click", () => {
+        document.querySelectorAll(".sidebar .nav-link").forEach(item => {
+          item.classList.remove("ativo");
+        });
+
+        link.classList.add("ativo");
+      });
+    });
+
+    // INICIALIZAÇÃO
+
+    atualizarAlergia();
+    atualizarIndicador();
+  </script>
+
+</body>
+</html>

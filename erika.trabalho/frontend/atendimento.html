@@ -1,0 +1,1552 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CLINOVA | Cadastro de Pacientes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --verde: #087f5b;
+      --verde-escuro: #075c43;
+      --verde-claro: #e7f6ef;
+      --verde-suave: #f1faf5;
+      --grafite: #202c29;
+      --texto: #26332f;
+      --secundario: #78847f;
+      --borda: #e2eae5;
+      --fundo: #f4f8f5;
+      --branco: #ffffff;
+      --vermelho: #dc3545;
+      --sombra: 0 12px 35px rgba(30, 70, 50, 0.07);
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    /* ESTRUTURA PRINCIPAL */
+
+    .pagina {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 285px 1fr;
+    }
+
+    /* MENU LATERAL */
+
+    .painel-lateral {
+      background: linear-gradient(165deg, #123c30, #087f5b);
+      color: white;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .painel-lateral::before,
+    .painel-lateral::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .painel-lateral::before {
+      width: 280px;
+      height: 280px;
+      right: -160px;
+      top: 180px;
+    }
+
+    .painel-lateral::after {
+      width: 220px;
+      height: 220px;
+      right: -120px;
+      top: 210px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-icone {
+      width: 45px;
+      height: 45px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .logo h1 {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      display: block;
+      font-size: 10px;
+      color: #c1e6d5;
+      letter-spacing: 2px;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    .lateral-conteudo {
+      margin-top: 85px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .etiqueta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 8px 12px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #d9f5e7;
+      margin-bottom: 20px;
+    }
+
+    .etiqueta::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: #66e3a5;
+      border-radius: 50%;
+    }
+
+    .lateral-conteudo h2 {
+      font-size: 30px;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .lateral-conteudo p {
+      color: #c6e1d4;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .etapas {
+      margin-top: 42px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .etapa {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      color: #c6e1d4;
+      font-size: 12px;
+    }
+
+    .etapa-numero {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .etapa.ativa .etapa-numero {
+      background: white;
+      color: var(--verde-escuro);
+    }
+
+    .etapa.ativa {
+      color: white;
+      font-weight: 700;
+    }
+
+    .lateral-rodape {
+      margin-top: auto;
+      padding-top: 35px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .lateral-rodape p {
+      font-size: 11px;
+      color: #c1e6d5;
+      line-height: 1.7;
+    }
+
+    /* CONTEÚDO */
+
+    .conteudo {
+      padding: 32px 5%;
+      min-width: 0;
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .topo-texto small {
+      display: block;
+      color: var(--verde);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 7px;
+    }
+
+    .topo-texto h2 {
+      font-size: 25px;
+      letter-spacing: -0.8px;
+      color: var(--grafite);
+    }
+
+    .topo-texto p {
+      color: var(--secundario);
+      font-size: 13px;
+      margin-top: 7px;
+    }
+
+    .selo-sistema {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: white;
+      border: 1px solid var(--borda);
+      padding: 11px 15px;
+      border-radius: 12px;
+      font-size: 11px;
+      color: var(--secundario);
+      white-space: nowrap;
+    }
+
+    .selo-sistema strong {
+      color: var(--verde);
+    }
+
+    .selo-icone {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: var(--verde-claro);
+      color: var(--verde);
+      font-size: 14px;
+    }
+
+    /* BARRA DE INFORMAÇÃO */
+
+    .aviso {
+      background: var(--verde-claro);
+      border: 1px solid #d1eddd;
+      border-radius: 14px;
+      padding: 15px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .aviso-icone {
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      background: white;
+      color: var(--verde);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-size: 17px;
+    }
+
+    .aviso strong {
+      font-size: 12px;
+      color: var(--verde-escuro);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .aviso p {
+      font-size: 11px;
+      color: #557466;
+      line-height: 1.5;
+    }
+
+    /* FORMULÁRIO */
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .cartao {
+      background: white;
+      border: 1px solid var(--borda);
+      border-radius: 17px;
+      padding: 25px;
+      box-shadow: var(--sombra);
+    }
+
+    .cartao-cabecalho {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding-bottom: 20px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid #edf1ee;
+    }
+
+    .cartao-icone {
+      width: 42px;
+      height: 42px;
+      background: var(--verde-claro);
+      color: var(--verde);
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+
+    .cartao-cabecalho h3 {
+      font-size: 15px;
+      color: var(--grafite);
+      margin-bottom: 4px;
+    }
+
+    .cartao-cabecalho p {
+      font-size: 11px;
+      color: var(--secundario);
+    }
+
+    .grade {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .campo {
+      min-width: 0;
+    }
+
+    .campo.largura-total {
+      grid-column: 1 / -1;
+    }
+
+    .campo label {
+      display: block;
+      color: #46534d;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .obrigatorio {
+      color: var(--verde);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--borda);
+      background: #fbfdfb;
+      color: var(--texto);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input,
+    select {
+      height: 47px;
+      padding: 0 13px;
+    }
+
+    textarea {
+      min-height: 90px;
+      padding: 13px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #a5afa9;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--verde);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(8,127,91,0.09);
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    /* RESPONSÁVEL */
+
+    .opcoes-responsavel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .opcao {
+      position: relative;
+    }
+
+    .opcao input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .opcao label {
+      min-height: 48px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      background: #fbfdfb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      color: #59665f;
+      transition: 0.2s;
+      margin: 0;
+    }
+
+    .opcao input:checked + label {
+      background: var(--verde-claro);
+      border-color: var(--verde);
+      color: var(--verde-escuro);
+      font-weight: 700;
+    }
+
+    .opcao input:focus-visible + label {
+      outline: 3px solid rgba(8,127,91,0.25);
+      outline-offset: 2px;
+    }
+
+    #campo-nome-responsavel {
+      display: none;
+      margin-top: 17px;
+    }
+
+    /* FOTO */
+
+    .area-foto {
+      border: 2px dashed #c9dcd0;
+      border-radius: 13px;
+      padding: 25px;
+      background: #f9fcfa;
+      text-align: center;
+      transition: 0.2s;
+    }
+
+    .area-foto:hover {
+      border-color: var(--verde);
+      background: var(--verde-suave);
+    }
+
+    .foto-icone {
+      width: 48px;
+      height: 48px;
+      background: var(--verde-claro);
+      color: var(--verde);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 12px;
+      font-size: 22px;
+    }
+
+    .area-foto strong {
+      display: block;
+      font-size: 13px;
+      color: var(--grafite);
+      margin-bottom: 5px;
+    }
+
+    .area-foto p {
+      color: var(--secundario);
+      font-size: 11px;
+      margin-bottom: 15px;
+    }
+
+    .botao-foto {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 1px solid #cbdcd1;
+      color: var(--verde-escuro) !important;
+      border-radius: 9px;
+      padding: 10px 17px;
+      cursor: pointer;
+      font-size: 11px !important;
+      font-weight: 700;
+      margin: 0 !important;
+      transition: 0.2s;
+    }
+
+    .botao-foto:hover {
+      background: var(--verde-claro);
+    }
+
+    #foto {
+      display: none;
+    }
+
+    .preview {
+      display: none;
+      width: 125px;
+      height: 125px;
+      object-fit: cover;
+      border-radius: 15px;
+      border: 4px solid white;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+      margin: 18px auto 0;
+    }
+
+    /* BOTÕES */
+
+    .acoes {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 5px 0 15px;
+    }
+
+    .acoes-info {
+      color: var(--secundario);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .grupo-botoes {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      min-height: 47px;
+      border: none;
+      border-radius: 10px;
+      padding: 0 20px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-cadastrar {
+      background: var(--verde);
+      color: white;
+      box-shadow: 0 5px 14px rgba(8,127,91,0.18);
+    }
+
+    .btn-cadastrar:hover {
+      background: var(--verde-escuro);
+      transform: translateY(-2px);
+    }
+
+    .btn-voltar {
+      background: white;
+      border: 1px solid var(--borda);
+      color: #53615a;
+    }
+
+    .btn-voltar:hover {
+      background: #f0f5f1;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* MENSAGEM */
+
+    .mensagem {
+      display: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+      margin-top: -5px;
+    }
+
+    .mensagem.carregando {
+      display: block;
+      background: #edf5ff;
+      color: #2563a8;
+    }
+
+    .mensagem.sucesso {
+      display: block;
+      background: #e7f8ef;
+      color: #087f5b;
+    }
+
+    .mensagem.erro {
+      display: block;
+      background: #fff0f0;
+      color: #c62828;
+    }
+
+    /* RODAPÉ */
+
+    .rodape {
+      border-top: 1px solid var(--borda);
+      padding: 20px 0 5px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      color: #929e97;
+      font-size: 10px;
+    }
+
+    .rodape strong {
+      color: var(--verde);
+    }
+
+    /* RESPONSIVIDADE */
+
+    @media (max-width: 1050px) {
+      .pagina {
+        grid-template-columns: 235px 1fr;
+      }
+
+      .conteudo {
+        padding: 28px 4%;
+      }
+
+      .painel-lateral {
+        padding: 28px 18px;
+      }
+
+      .lateral-conteudo h2 {
+        font-size: 26px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .pagina {
+        display: block;
+      }
+
+      .painel-lateral {
+        padding: 20px;
+      }
+
+      .lateral-conteudo {
+        margin-top: 25px;
+      }
+
+      .lateral-conteudo h2 {
+        font-size: 23px;
+        max-width: 420px;
+      }
+
+      .lateral-conteudo p {
+        max-width: 500px;
+      }
+
+      .etapas {
+        display: none;
+      }
+
+      .lateral-rodape {
+        display: none;
+      }
+
+      .conteudo {
+        padding: 25px 18px;
+      }
+
+      .topo {
+        align-items: flex-start;
+      }
+
+      .selo-sistema {
+        display: none;
+      }
+
+      .cartao {
+        padding: 20px;
+      }
+
+      .acoes {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .grupo-botoes {
+        width: 100%;
+      }
+
+      .grupo-botoes button {
+        flex: 1;
+      }
+
+      .rodape {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .grade {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .campo.largura-total {
+        grid-column: auto;
+      }
+
+      .opcoes-responsavel {
+        grid-template-columns: 1fr;
+      }
+
+      .topo-texto h2 {
+        font-size: 21px;
+      }
+
+      .aviso {
+        align-items: flex-start;
+      }
+
+      .cartao-cabecalho {
+        align-items: flex-start;
+      }
+
+      .grupo-botoes {
+        flex-direction: column;
+      }
+
+      .grupo-botoes button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="pagina">
+
+    <!-- PAINEL LATERAL -->
+
+    <aside class="painel-lateral">
+
+      <div class="logo">
+        <div class="logo-icone">✚</div>
+
+        <div>
+          <h1>CLINOVA</h1>
+          <span>SISTEMA HOSPITALAR</span>
+        </div>
+      </div>
+
+      <div class="lateral-conteudo">
+
+        <div class="etiqueta">
+          Módulo de atendimento
+        </div>
+
+        <h2>Cadastro de pacientes</h2>
+
+        <p>
+          Registre as informações do paciente de maneira organizada
+          e segura para iniciar o atendimento hospitalar.
+        </p>
+
+        <div class="etapas">
+
+          <div class="etapa ativa">
+            <div class="etapa-numero">01</div>
+            <span>Identificação do paciente</span>
+          </div>
+
+          <div class="etapa">
+            <div class="etapa-numero">02</div>
+            <span>Responsável e contato</span>
+          </div>
+
+          <div class="etapa">
+            <div class="etapa-numero">03</div>
+            <span>Dados do atendimento</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="lateral-rodape">
+        <p>
+          CLINOVA © 2026<br>
+          Tecnologia, organização e cuidado com a saúde.
+        </p>
+      </div>
+
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+
+    <main class="conteudo">
+
+      <header class="topo">
+
+        <div class="topo-texto">
+          <small>CLINOVA / Atendimento</small>
+          <h2>Novo cadastro</h2>
+          <p>Preencha os dados para registrar um paciente no sistema.</p>
+        </div>
+
+        <div class="selo-sistema">
+          <div class="selo-icone">✚</div>
+          <div>
+            <strong>Sistema ativo</strong>
+            <div>Ambiente de atendimento</div>
+          </div>
+        </div>
+
+      </header>
+
+      <div class="aviso">
+        <div class="aviso-icone">ⓘ</div>
+
+        <div>
+          <strong>Orientação de cadastro</strong>
+          <p>
+            Confira os dados antes de enviar. Os campos marcados com
+            * são obrigatórios.
+          </p>
+        </div>
+      </div>
+
+      <!-- FORMULÁRIO -->
+
+      <form id="form-atendimento">
+
+        <!-- DADOS PESSOAIS -->
+
+        <section class="cartao">
+
+          <div class="cartao-cabecalho">
+            <div class="cartao-icone">♙</div>
+
+            <div>
+              <h3>Identificação do paciente</h3>
+              <p>Dados pessoais para identificação e registro.</p>
+            </div>
+          </div>
+
+          <div class="grade">
+
+            <div class="campo largura-total">
+              <label for="nome">
+                Nome completo <span class="obrigatorio">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="nome"
+                placeholder="Digite o nome completo"
+                autocomplete="name"
+                required
+              >
+            </div>
+
+            <div class="campo">
+              <label for="documento">
+                CPF ou RG <span class="obrigatorio">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="documento"
+                placeholder="Digite o CPF ou RG"
+                autocomplete="off"
+                required
+              >
+            </div>
+
+            <div class="campo">
+              <label for="dataNascimento">
+                Data de nascimento <span class="obrigatorio">*</span>
+              </label>
+
+              <input
+                type="date"
+                id="dataNascimento"
+                required
+              >
+            </div>
+
+            <div class="campo">
+              <label for="sexo">
+                Sexo <span class="obrigatorio">*</span>
+              </label>
+
+              <select id="sexo" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Outro">Outro</option>
+                <option value="Nao informado">Prefiro não informar</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="estadoCivil">
+                Estado civil <span class="obrigatorio">*</span>
+              </label>
+
+              <select id="estadoCivil" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="Solteiro">Solteiro(a)</option>
+                <option value="Casado">Casado(a)</option>
+                <option value="Divorciado">Divorciado(a)</option>
+                <option value="Viuvo">Viúvo(a)</option>
+                <option value="Uniao estavel">União estável</option>
+              </select>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- RESPONSÁVEL -->
+
+        <section class="cartao">
+
+          <div class="cartao-cabecalho">
+            <div class="cartao-icone">♧</div>
+
+            <div>
+              <h3>Responsável pelo paciente</h3>
+              <p>Informe quem ficará responsável pelo cadastro.</p>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label>
+              O paciente é o próprio responsável?
+              <span class="obrigatorio">*</span>
+            </label>
+
+            <div class="opcoes-responsavel">
+
+              <div class="opcao">
+                <input
+                  type="radio"
+                  name="proprioResponsavel"
+                  id="responsavelSim"
+                  value="Sim"
+                  required
+                >
+
+                <label for="responsavelSim">
+                  ✓ Sim, sou o responsável
+                </label>
+              </div>
+
+              <div class="opcao">
+                <input
+                  type="radio"
+                  name="proprioResponsavel"
+                  id="responsavelNao"
+                  value="Nao"
+                >
+
+                <label for="responsavelNao">
+                  Não, outra pessoa
+                </label>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="campo" id="campo-nome-responsavel">
+            <label for="nomeResponsavel">
+              Nome completo do responsável
+              <span class="obrigatorio">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="nomeResponsavel"
+              placeholder="Digite o nome do responsável"
+            >
+          </div>
+
+        </section>
+
+        <!-- CONTATO -->
+
+        <section class="cartao">
+
+          <div class="cartao-cabecalho">
+            <div class="cartao-icone">☏</div>
+
+            <div>
+              <h3>Contato e endereço</h3>
+              <p>Informações para comunicação com o paciente.</p>
+            </div>
+          </div>
+
+          <div class="grade">
+
+            <div class="campo">
+              <label for="telefone">
+                Telefone <span class="obrigatorio">*</span>
+              </label>
+
+              <input
+                type="tel"
+                id="telefone"
+                placeholder="(00) 00000-0000"
+                inputmode="tel"
+                autocomplete="tel"
+                required
+              >
+            </div>
+
+            <div class="campo">
+              <label for="email">E-mail</label>
+
+              <input
+                type="email"
+                id="email"
+                placeholder="exemplo@email.com"
+                autocomplete="email"
+              >
+            </div>
+
+            <div class="campo largura-total">
+              <label for="endereco">
+                Endereço completo <span class="obrigatorio">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="endereco"
+                placeholder="Rua, número, bairro, cidade e estado"
+                autocomplete="street-address"
+                required
+              >
+            </div>
+
+            <div class="campo largura-total">
+              <label for="contatoEmergencia">
+                Contato de emergência
+                <span class="obrigatorio">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="contatoEmergencia"
+                placeholder="Nome e telefone do contato de emergência"
+                required
+              >
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ATENDIMENTO -->
+
+        <section class="cartao">
+
+          <div class="cartao-cabecalho">
+            <div class="cartao-icone">✚</div>
+
+            <div>
+              <h3>Informações do atendimento</h3>
+              <p>Defina a modalidade de atendimento do paciente.</p>
+            </div>
+          </div>
+
+          <div class="grade">
+
+            <div class="campo largura-total">
+              <label for="tipo">
+                Tipo de atendimento
+                <span class="obrigatorio">*</span>
+              </label>
+
+              <select id="tipo" required>
+                <option value="" disabled selected>
+                  Selecione uma modalidade
+                </option>
+
+                <option value="Convenio">Convênio</option>
+                <option value="Particular">Particular</option>
+              </select>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- FOTO -->
+
+        <section class="cartao">
+
+          <div class="cartao-cabecalho">
+            <div class="cartao-icone">▧</div>
+
+            <div>
+              <h3>Foto do paciente</h3>
+              <p>Adicione uma imagem para facilitar a identificação.</p>
+            </div>
+          </div>
+
+          <div class="area-foto">
+
+            <div class="foto-icone">▧</div>
+
+            <strong>Imagem de identificação</strong>
+
+            <p>Selecione uma imagem no formato JPG, PNG ou outro formato de imagem.</p>
+
+            <label class="botao-foto" for="foto">
+              + Selecionar imagem
+            </label>
+
+            <input
+              type="file"
+              id="foto"
+              accept="image/*"
+            >
+
+            <img
+              id="preview"
+              class="preview"
+              alt="Pré-visualização da foto do paciente"
+            >
+
+          </div>
+
+        </section>
+
+        <!-- AÇÕES -->
+
+        <div class="acoes">
+
+          <p class="acoes-info">
+            <strong>* Campos obrigatórios</strong><br>
+            Verifique as informações antes de finalizar o cadastro.
+          </p>
+
+          <div class="grupo-botoes">
+
+            <button
+              type="button"
+              class="btn-voltar"
+              onclick="voltar()"
+            >
+              ← Voltar
+            </button>
+
+            <button
+              type="submit"
+              class="btn-cadastrar"
+              id="botaoCadastrar"
+            >
+              ✓ Cadastrar paciente
+            </button>
+
+          </div>
+
+        </div>
+
+        <p
+          id="mensagem"
+          class="mensagem"
+          aria-live="polite"
+          role="status"
+        ></p>
+
+      </form>
+
+      <footer class="rodape">
+        <span>CLINOVA © 2026 — Sistema Hospitalar</span>
+        <span>Desenvolvido para <strong>cuidar melhor</strong>.</span>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <script>
+    /*
+      CONFIGURAÇÃO DA API
+
+      Backend hospedado no Render.
+      A rota /atendimento é adicionada automaticamente.
+    */
+
+    const API_BASE_URL = "https://sentinela-4bqu.onrender.com";
+
+    const formulario = document.getElementById("form-atendimento");
+    const campoCpf = document.getElementById("documento");
+    const campoFoto = document.getElementById("foto");
+    const preview = document.getElementById("preview");
+    const mensagem = document.getElementById("mensagem");
+    const botaoCadastrar = document.getElementById("botaoCadastrar");
+
+    const responsavelSim = document.getElementById("responsavelSim");
+    const responsavelNao = document.getElementById("responsavelNao");
+
+    const campoNomeResponsavel =
+      document.getElementById("campo-nome-responsavel");
+
+    const nomeResponsavel =
+      document.getElementById("nomeResponsavel");
+
+    const telefone = document.getElementById("telefone");
+
+    /* =========================
+       DATA DE NASCIMENTO
+    ========================= */
+
+    const dataNascimento = document.getElementById("dataNascimento");
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const dia = String(hoje.getDate()).padStart(2, "0");
+
+    dataNascimento.max = `${ano}-${mes}-${dia}`;
+
+    /* =========================
+       RESPONSÁVEL
+    ========================= */
+
+    responsavelSim.addEventListener("change", () => {
+      campoNomeResponsavel.style.display = "none";
+
+      nomeResponsavel.required = false;
+      nomeResponsavel.value = "";
+    });
+
+    responsavelNao.addEventListener("change", () => {
+      campoNomeResponsavel.style.display = "block";
+
+      nomeResponsavel.required = true;
+    });
+
+    /* =========================
+       MÁSCARA CPF
+    ========================= */
+
+    campoCpf.addEventListener("input", () => {
+      let valor = campoCpf.value.replace(/\D/g, "").slice(0, 11);
+
+      valor = valor
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+      campoCpf.value = valor;
+    });
+
+    /* =========================
+       MÁSCARA TELEFONE
+    ========================= */
+
+    telefone.addEventListener("input", () => {
+      let valor = telefone.value
+        .replace(/\D/g, "")
+        .slice(0, 11);
+
+      if (valor.length <= 10) {
+        valor = valor
+          .replace(/(\d{2})(\d)/, "($1) $2")
+          .replace(/(\d{4})(\d)/, "$1-$2");
+      } else {
+        valor = valor
+          .replace(/(\d{2})(\d)/, "($1) $2")
+          .replace(/(\d{5})(\d)/, "$1-$2");
+      }
+
+      telefone.value = valor;
+    });
+
+    /* =========================
+       PRÉ-VISUALIZAÇÃO DA FOTO
+    ========================= */
+
+    let urlFotoAtual = null;
+
+    campoFoto.addEventListener("change", () => {
+      const arquivo = campoFoto.files[0];
+
+      if (urlFotoAtual) {
+        URL.revokeObjectURL(urlFotoAtual);
+        urlFotoAtual = null;
+      }
+
+      if (!arquivo) {
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+        return;
+      }
+
+      if (!arquivo.type.startsWith("image/")) {
+        mensagem.textContent =
+          "Selecione um arquivo de imagem válido.";
+
+        mensagem.className = "mensagem erro";
+
+        campoFoto.value = "";
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+        return;
+      }
+
+      urlFotoAtual = URL.createObjectURL(arquivo);
+
+      preview.src = urlFotoAtual;
+      preview.style.display = "block";
+
+      mensagem.textContent = "";
+      mensagem.className = "mensagem";
+    });
+
+    /* =========================
+       ENVIO DO FORMULÁRIO
+    ========================= */
+
+    formulario.addEventListener("submit", cadastrar);
+
+    async function cadastrar(evento) {
+      evento.preventDefault();
+
+      if (botaoCadastrar.disabled) {
+        return;
+      }
+
+      const responsavelSelecionado = document.querySelector(
+        'input[name="proprioResponsavel"]:checked'
+      );
+
+      if (!responsavelSelecionado) {
+        mensagem.textContent =
+          "Selecione quem é o responsável pelo paciente.";
+
+        mensagem.className = "mensagem erro";
+        return;
+      }
+
+      mensagem.textContent = "Enviando cadastro...";
+      mensagem.className = "mensagem carregando";
+
+      botaoCadastrar.disabled = true;
+      botaoCadastrar.textContent = "Enviando...";
+
+      const documento = campoCpf.value.trim();
+
+      const paciente = {
+        nome: document.getElementById("nome").value.trim(),
+
+        documento: documento,
+
+        // Compatibilidade com backends que utilizam o campo "cpf".
+        cpf: documento,
+
+        dataNascimento:
+          document.getElementById("dataNascimento").value,
+
+        sexo:
+          document.getElementById("sexo").value,
+
+        estadoCivil:
+          document.getElementById("estadoCivil").value,
+
+        proprioResponsavel:
+          responsavelSelecionado.value,
+
+        nomeResponsavel:
+          nomeResponsavel.value.trim(),
+
+        endereco:
+          document.getElementById("endereco").value.trim(),
+
+        telefone:
+          telefone.value.trim(),
+
+        email:
+          document.getElementById("email").value.trim(),
+
+        contatoEmergencia:
+          document.getElementById("contatoEmergencia").value.trim(),
+
+        tipo:
+          document.getElementById("tipo").value
+      };
+
+      if (API_BASE_URL.includes("SUA-API")) {
+        mensagem.textContent =
+          "Configure a URL pública da API do Render na constante API_BASE_URL.";
+
+        mensagem.className = "mensagem erro";
+
+        botaoCadastrar.disabled = false;
+        botaoCadastrar.textContent = "✓ Cadastrar paciente";
+        return;
+      }
+
+      try {
+        const resposta = await fetch(
+          `${API_BASE_URL.replace(/\/$/, "")}/atendimento`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+
+            body: JSON.stringify(paciente)
+          }
+        );
+
+        const tipoConteudo =
+          resposta.headers.get("content-type") || "";
+
+        const resultado = tipoConteudo.includes("application/json")
+          ? await resposta.json()
+          : await resposta.text();
+
+        if (!resposta.ok) {
+          const detalhe = typeof resultado === "object"
+            ? (
+                resultado.erro ||
+                resultado.mensagem ||
+                resultado.message
+              )
+            : resultado;
+
+          throw new Error(
+            detalhe || `Erro HTTP ${resposta.status}`
+          );
+        }
+
+        mensagem.textContent =
+          "✓ Paciente cadastrado com sucesso!";
+
+        mensagem.className = "mensagem sucesso";
+
+        formulario.reset();
+
+        campoNomeResponsavel.style.display = "none";
+        nomeResponsavel.required = false;
+
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+
+        if (urlFotoAtual) {
+          URL.revokeObjectURL(urlFotoAtual);
+          urlFotoAtual = null;
+        }
+
+      } catch (erro) {
+        console.error("Erro ao cadastrar paciente:", erro);
+
+        let textoErro = erro.message || "Erro desconhecido.";
+
+        if (erro instanceof TypeError) {
+          textoErro =
+            "Não foi possível acessar a API. Confira se o backend do Render está ativo e se o CORS permite o site do GitHub Pages.";
+        }
+
+        mensagem.textContent =
+          `Não foi possível cadastrar o paciente. ${textoErro}`;
+
+        mensagem.className = "mensagem erro";
+
+      } finally {
+        botaoCadastrar.disabled = false;
+        botaoCadastrar.textContent = "✓ Cadastrar paciente";
+      }
+    }
+
+    /* =========================
+       BOTÃO VOLTAR
+    ========================= */
+
+    function voltar() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

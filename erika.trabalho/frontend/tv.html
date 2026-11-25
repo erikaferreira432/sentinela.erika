@@ -1,0 +1,949 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#082c24">
+
+  <title>CLINOVA | Painel de Chamadas</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --fundo: #071d18;
+      --fundo-card: #0e3027;
+      --verde: #13a879;
+      --verde-claro: #39d6a0;
+      --verde-escuro: #075b43;
+      --branco: #ffffff;
+      --texto: #d9e9e2;
+      --texto-suave: #8da99c;
+      --borda: rgba(255,255,255,.09);
+      --amarelo: #e9c46a;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--branco);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(19,168,121,.17), transparent 30%),
+        radial-gradient(circle at 90% 85%, rgba(57,214,160,.09), transparent 30%),
+        var(--fundo);
+    }
+
+    /* ESTRUTURA PRINCIPAL */
+
+    .painel {
+      width: 100%;
+      max-width: 1450px;
+      min-height: 850px;
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      overflow: hidden;
+      background: #0a261f;
+      border: 1px solid var(--borda);
+      border-radius: 25px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.35);
+    }
+
+    /* LATERAL */
+
+    .lateral {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 35px 28px;
+      background: linear-gradient(180deg, #0d382c, #09271f);
+      border-right: 1px solid var(--borda);
+    }
+
+    .marca {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .marca-icone {
+      width: 49px;
+      height: 49px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background: linear-gradient(145deg, #19bd89, #087451);
+      border-radius: 15px;
+      font-size: 25px;
+      box-shadow: 0 8px 25px rgba(19,168,121,.2);
+    }
+
+    .marca-nome {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .marca-nome span {
+      color: var(--verde-claro);
+    }
+
+    .marca-descricao {
+      margin-top: 4px;
+      color: var(--texto-suave);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .lateral-centro {
+      margin-top: 80px;
+    }
+
+    .etiqueta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      color: var(--verde-claro);
+      background: rgba(57,214,160,.09);
+      border: 1px solid rgba(57,214,160,.18);
+      border-radius: 30px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .etiqueta-ponto {
+      width: 7px;
+      height: 7px;
+      background: var(--verde-claro);
+      border-radius: 50%;
+      animation: pulsar 1.5s infinite;
+    }
+
+    .lateral-centro h2 {
+      margin-top: 25px;
+      font-size: 31px;
+      line-height: 1.2;
+      letter-spacing: -.8px;
+    }
+
+    .lateral-centro h2 span {
+      color: var(--verde-claro);
+    }
+
+    .lateral-centro p {
+      margin-top: 15px;
+      color: var(--texto-suave);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .linha-decorativa {
+      width: 65px;
+      height: 4px;
+      margin-top: 25px;
+      background: var(--verde);
+      border-radius: 10px;
+    }
+
+    .lateral-inferior {
+      padding-top: 25px;
+      border-top: 1px solid var(--borda);
+    }
+
+    .relogio {
+      color: white;
+      font-size: 35px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .data {
+      margin-top: 7px;
+      color: var(--texto-suave);
+      font-size: 11px;
+      text-transform: capitalize;
+    }
+
+    .sistema-info {
+      margin-top: 27px;
+      color: #78988a;
+      font-size: 9px;
+      line-height: 1.8;
+    }
+
+    /* ÁREA PRINCIPAL */
+
+    .principal {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 38px 42px 25px;
+    }
+
+    .topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .topo-texto span {
+      color: var(--verde-claro);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .topo-texto h1 {
+      margin-top: 8px;
+      font-size: 23px;
+      letter-spacing: -.5px;
+    }
+
+    .conexao {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 13px;
+      color: #a8e7ca;
+      background: rgba(19,168,121,.10);
+      border: 1px solid rgba(19,168,121,.18);
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .conexao span {
+      width: 7px;
+      height: 7px;
+      background: #35d69b;
+      border-radius: 50%;
+    }
+
+    /* CHAMADA ATUAL */
+
+    .area-chamada {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 35px 0;
+    }
+
+    .chamada-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--texto-suave);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .chamada-label::before {
+      content: "";
+      width: 25px;
+      height: 2px;
+      background: var(--verde-claro);
+    }
+
+    .chamada-card {
+      position: relative;
+      overflow: hidden;
+      margin-top: 22px;
+      padding: 42px;
+      background:
+        linear-gradient(125deg, rgba(20,105,75,.34), rgba(12,49,39,.92));
+      border: 1px solid rgba(57,214,160,.17);
+      border-radius: 23px;
+    }
+
+    .chamada-card::after {
+      content: "✚";
+      position: absolute;
+      right: 25px;
+      bottom: -70px;
+      color: rgba(57,214,160,.045);
+      font-size: 240px;
+      pointer-events: none;
+    }
+
+    .chamada-conteudo {
+      position: relative;
+      z-index: 1;
+    }
+
+    .icone-paciente {
+      width: 65px;
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--verde-claro);
+      background: rgba(57,214,160,.12);
+      border: 1px solid rgba(57,214,160,.2);
+      border-radius: 18px;
+      font-size: 29px;
+    }
+
+    .texto-orientacao {
+      margin-top: 30px;
+      color: #a6c7b8;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nome-paciente {
+      max-width: 100%;
+      margin-top: 13px;
+      color: white;
+      font-size: clamp(32px, 5vw, 65px);
+      font-weight: 900;
+      line-height: 1.12;
+      letter-spacing: -2px;
+      overflow-wrap: anywhere;
+      transition: .3s;
+    }
+
+    .nome-paciente.aguardando {
+      color: #91a99e;
+      font-size: clamp(27px, 4vw, 42px);
+      letter-spacing: -1px;
+    }
+
+    .nome-paciente.nova-chamada {
+      animation: entrada .7s ease;
+    }
+
+    .mensagem-apoio {
+      margin-top: 17px;
+      color: #9bb8aa;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    /* INFORMAÇÕES */
+
+    .grade-informacoes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+      margin-top: 20px;
+    }
+
+    .informacao {
+      min-height: 145px;
+      padding: 23px;
+      background: #10372c;
+      border: 1px solid var(--borda);
+      border-radius: 17px;
+    }
+
+    .informacao-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .informacao-topo span {
+      color: #9cb6aa;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .informacao-icone {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--verde-claro);
+      background: rgba(57,214,160,.10);
+      border-radius: 9px;
+      font-size: 16px;
+    }
+
+    .informacao strong {
+      display: block;
+      margin-top: 18px;
+      color: white;
+      font-size: 34px;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    /* ESPERA */
+
+    .espera-indicador {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+      padding: 15px 18px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+    }
+
+    .espera-icone {
+      width: 33px;
+      height: 33px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--amarelo);
+      background: rgba(233,196,106,.10);
+      border-radius: 9px;
+    }
+
+    .espera-texto strong {
+      display: block;
+      color: #e1eee7;
+      font-size: 10px;
+    }
+
+    .espera-texto p {
+      margin-top: 4px;
+      color: var(--texto-suave);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    /* RODAPÉ */
+
+    .rodape {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--borda);
+    }
+
+    .rodape strong {
+      color: #9cb6aa;
+      font-size: 10px;
+      letter-spacing: .5px;
+    }
+
+    .rodape span {
+      color: #668478;
+      font-size: 9px;
+    }
+
+    /* ANIMAÇÕES */
+
+    @keyframes pulsar {
+      0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(57,214,160,.25);
+      }
+      50% {
+        opacity: .5;
+        box-shadow: 0 0 0 6px rgba(57,214,160,0);
+      }
+    }
+
+    @keyframes entrada {
+      0% {
+        opacity: 0;
+        transform: translateY(15px) scale(.98);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* RESPONSIVIDADE */
+
+    @media (max-width: 900px) {
+      body {
+        padding: 15px;
+      }
+
+      .painel {
+        grid-template-columns: 240px minmax(0, 1fr);
+      }
+
+      .lateral {
+        padding: 28px 20px;
+      }
+
+      .principal {
+        padding: 30px 25px 22px;
+      }
+
+      .chamada-card {
+        padding: 30px;
+      }
+
+      .lateral-centro h2 {
+        font-size: 26px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      body {
+        padding: 0;
+        display: block;
+      }
+
+      .painel {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        border: none;
+        border-radius: 0;
+      }
+
+      .lateral {
+        padding: 20px;
+        border-right: none;
+        border-bottom: 1px solid var(--borda);
+      }
+
+      .lateral-centro {
+        display: none;
+      }
+
+      .lateral-inferior {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 18px;
+        padding-top: 15px;
+      }
+
+      .relogio {
+        font-size: 25px;
+      }
+
+      .data {
+        font-size: 9px;
+      }
+
+      .sistema-info {
+        max-width: 125px;
+        margin-top: 0;
+        text-align: right;
+      }
+
+      .principal {
+        flex: 1;
+        padding: 23px 17px;
+      }
+
+      .topo {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .topo-texto h1 {
+        font-size: 20px;
+      }
+
+      .area-chamada {
+        padding: 28px 0;
+      }
+
+      .chamada-card {
+        padding: 25px 20px;
+      }
+
+      .icone-paciente {
+        width: 53px;
+        height: 53px;
+        font-size: 24px;
+      }
+
+      .nome-paciente {
+        font-size: 39px;
+        letter-spacing: -1.5px;
+      }
+
+      .grade-informacoes {
+        gap: 10px;
+      }
+
+      .informacao {
+        min-height: 120px;
+        padding: 16px;
+      }
+
+      .informacao strong {
+        font-size: 27px;
+      }
+
+      .informacao-topo span {
+        font-size: 8px;
+        letter-spacing: 1px;
+      }
+
+      .rodape {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .grade-informacoes {
+        grid-template-columns: 1fr;
+      }
+
+      .informacao {
+        min-height: 105px;
+      }
+
+      .nome-paciente {
+        font-size: 32px;
+      }
+
+      .conexao {
+        font-size: 9px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="painel">
+
+    <!-- LATERAL -->
+
+    <aside class="lateral">
+
+      <div>
+        <div class="marca">
+          <div class="marca-icone">✚</div>
+
+          <div>
+            <div class="marca-nome">CLIN<span>OVA</span></div>
+            <div class="marca-descricao">Gestão hospitalar</div>
+          </div>
+        </div>
+
+        <div class="lateral-centro">
+          <div class="etiqueta">
+            <span class="etiqueta-ponto"></span>
+            Painel público
+          </div>
+
+          <h2>
+            Atendimento com
+            <span>organização</span>
+            e cuidado.
+          </h2>
+
+          <p>
+            Acompanhe as chamadas de pacientes em tempo real.
+            Fique atento às informações exibidas na tela.
+          </p>
+
+          <div class="linha-decorativa"></div>
+        </div>
+      </div>
+
+      <div class="lateral-inferior">
+        <div>
+          <div class="relogio" id="relogio">00:00:00</div>
+          <div class="data" id="data">Carregando data...</div>
+        </div>
+
+        <div class="sistema-info">
+          CLINOVA<br>
+          Central de atendimento<br>
+          Sistema de chamadas
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+
+    <section class="principal">
+
+      <header class="topo">
+        <div class="topo-texto">
+          <span>Comunicação hospitalar</span>
+          <h1>Painel de chamadas</h1>
+        </div>
+
+        <div class="conexao">
+          <span></span>
+          Monitoramento ativo
+        </div>
+      </header>
+
+      <div class="area-chamada">
+
+        <div class="chamada-label">
+          Atendimento em andamento
+        </div>
+
+        <section class="chamada-card">
+
+          <div class="chamada-conteudo">
+
+            <div class="icone-paciente">♙</div>
+
+            <p class="texto-orientacao" id="textoOrientacao">
+              O próximo atendimento será anunciado aqui
+            </p>
+
+            <h2 class="nome-paciente aguardando" id="nomePaciente">
+              Aguardando chamada...
+            </h2>
+
+            <p class="mensagem-apoio" id="mensagemApoio">
+              Por favor, aguarde. Assim que houver uma chamada,
+              as informações serão atualizadas automaticamente.
+            </p>
+
+          </div>
+
+        </section>
+
+        <section class="grade-informacoes">
+
+          <div class="informacao">
+            <div class="informacao-topo">
+              <span>Local de atendimento</span>
+              <div class="informacao-icone">⌂</div>
+            </div>
+
+            <strong id="salaPaciente">—</strong>
+          </div>
+
+          <div class="informacao">
+            <div class="informacao-topo">
+              <span>Guichê</span>
+              <div class="informacao-icone">▣</div>
+            </div>
+
+            <strong id="guichePaciente">—</strong>
+          </div>
+
+        </section>
+
+        <div class="espera-indicador">
+          <div class="espera-icone">ⓘ</div>
+
+          <div class="espera-texto">
+            <strong>Orientação ao paciente</strong>
+            <p id="orientacaoEspera">
+              Em caso de dúvidas, procure a recepção do hospital.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="rodape">
+        <strong id="horario">
+          CLINOVA • Aguardando atendimento
+        </strong>
+
+        <span>CLINOVA © 2026 — Sistema de Gestão Hospitalar</span>
+      </footer>
+
+    </section>
+
+  </main>
+
+  <script>
+    /* =====================================
+       RELÓGIO E DATA
+    ===================================== */
+
+    function atualizarRelogio() {
+      const agora = new Date();
+
+      document.getElementById("relogio").textContent =
+        agora.toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        });
+
+      document.getElementById("data").textContent =
+        agora.toLocaleDateString("pt-BR", {
+          weekday: "long",
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        });
+    }
+
+    atualizarRelogio();
+    setInterval(atualizarRelogio, 1000);
+
+
+    /* =====================================
+       ELEMENTOS DA CHAMADA
+    ===================================== */
+
+    const nomeElemento = document.getElementById("nomePaciente");
+    const salaElemento = document.getElementById("salaPaciente");
+    const guicheElemento = document.getElementById("guichePaciente");
+    const horarioElemento = document.getElementById("horario");
+    const orientacaoElemento = document.getElementById("mensagemApoio");
+    const textoOrientacao = document.getElementById("textoOrientacao");
+    const orientacaoEspera = document.getElementById("orientacaoEspera");
+
+    let ultimaChamada = "";
+
+
+    /* =====================================
+       EXIBIR ESTADO DE ESPERA
+    ===================================== */
+
+    function mostrarEspera() {
+      nomeElemento.textContent = "Aguardando chamada...";
+      nomeElemento.classList.add("aguardando");
+      nomeElemento.classList.remove("nova-chamada");
+
+      salaElemento.textContent = "—";
+      guicheElemento.textContent = "—";
+
+      textoOrientacao.textContent =
+        "O próximo atendimento será anunciado aqui";
+
+      orientacaoElemento.textContent =
+        "Por favor, aguarde. Assim que houver uma chamada, as informações serão atualizadas automaticamente.";
+
+      orientacaoEspera.textContent =
+        "Em caso de dúvidas, procure a recepção do hospital.";
+
+      horarioElemento.textContent =
+        "CLINOVA • Aguardando atendimento";
+    }
+
+
+    /* =====================================
+       CARREGAR CHAMADA
+    ===================================== */
+
+    function carregarChamada() {
+      const dados = localStorage.getItem("chamadaTV");
+
+      if (!dados) {
+        ultimaChamada = "";
+        mostrarEspera();
+        return;
+      }
+
+      try {
+        const chamada = JSON.parse(dados);
+
+        if (!chamada || typeof chamada !== "object") {
+          mostrarEspera();
+          return;
+        }
+
+        const nomePaciente = chamada.nome || "Paciente";
+        const salaPaciente = chamada.sala || "—";
+        const guichePaciente = chamada.guiche || "—";
+        const horarioChamada = chamada.horario || "";
+
+        const identificador = [
+          nomePaciente,
+          salaPaciente,
+          guichePaciente,
+          horarioChamada
+        ].join("|");
+
+        // Detecta uma chamada nova.
+
+        if (identificador !== ultimaChamada) {
+          ultimaChamada = identificador;
+
+          nomeElemento.classList.remove("nova-chamada");
+
+          void nomeElemento.offsetWidth;
+
+          nomeElemento.classList.remove("aguardando");
+          nomeElemento.classList.add("nova-chamada");
+        }
+
+        nomeElemento.textContent = nomePaciente;
+        salaElemento.textContent = salaPaciente;
+        guicheElemento.textContent = guichePaciente;
+
+        textoOrientacao.textContent =
+          "Paciente chamado. Dirija-se ao local indicado.";
+
+        orientacaoElemento.textContent =
+          "Por favor, compareça ao local indicado para dar continuidade ao seu atendimento.";
+
+        orientacaoEspera.textContent =
+          "Acompanhe as informações exibidas na tela.";
+
+        horarioElemento.textContent =
+          "CLINOVA • " +
+          (
+            horarioChamada
+              ? "Chamada realizada às " + horarioChamada
+              : "Paciente chamado"
+          );
+
+      } catch (erro) {
+        console.error("Erro ao carregar chamada:", erro);
+      }
+    }
+
+
+    /* =====================================
+       ATUALIZAÇÃO AUTOMÁTICA
+    ===================================== */
+
+    carregarChamada();
+
+    setInterval(carregarChamada, 1000);
+
+    // Atualiza a tela quando outra aba modifica a chamada.
+    window.addEventListener("storage", (evento) => {
+      if (evento.key === "chamadaTV") {
+        carregarChamada();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
